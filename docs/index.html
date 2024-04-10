@@ -84,19 +84,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
   <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation"><span class="header-section-number">2</span> Installation</a></li>
-  <li><a href="#procedure-overview" id="toc-procedure-overview" class="nav-link" data-scroll-target="#procedure-overview"><span class="header-section-number">3</span> Procedure Overview</a>
+  <li><a href="#procedures" id="toc-procedures" class="nav-link" data-scroll-target="#procedures"><span class="header-section-number">3</span> Procedures</a>
   <ul>
-  <li><a href="#reading-and-transforming-data" id="toc-reading-and-transforming-data" class="nav-link" data-scroll-target="#reading-and-transforming-data"><span class="header-section-number">3.1</span> Reading and Transforming Data</a>
+  <li><a href="#oecd-and-iiasa-data" id="toc-oecd-and-iiasa-data" class="nav-link" data-scroll-target="#oecd-and-iiasa-data"><span class="header-section-number">3.1</span> OECD and IIASA Data</a></li>
+  <li><a href="#wic-data" id="toc-wic-data" class="nav-link" data-scroll-target="#wic-data"><span class="header-section-number">3.2</span> WIC Data</a>
   <ul>
-  <li><a href="#oecd-and-iiasa-data" id="toc-oecd-and-iiasa-data" class="nav-link" data-scroll-target="#oecd-and-iiasa-data"><span class="header-section-number">3.1.1</span> OECD and IIASA Data</a></li>
-  <li><a href="#wic-data" id="toc-wic-data" class="nav-link" data-scroll-target="#wic-data"><span class="header-section-number">3.1.2</span> WIC Data</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#wic-data-processing-steps" id="toc-wic-data-processing-steps" class="nav-link" data-scroll-target="#wic-data-processing-steps"><span class="header-section-number">4</span> WIC data processing steps</a>
-  <ul>
-  <li><a href="#joining-and-finalizing-data" id="toc-joining-and-finalizing-data" class="nav-link" data-scroll-target="#joining-and-finalizing-data"><span class="header-section-number">4.1</span> Joining and Finalizing Data</a>
-  <ul>
-  <li><a href="#labeling-and-cleaning-data-for-export" id="toc-labeling-and-cleaning-data-for-export" class="nav-link" data-scroll-target="#labeling-and-cleaning-data-for-export"><span class="header-section-number">4.1.0.1</span> Labeling and Cleaning Data for Export</a></li>
+  <li><a href="#wic-data-processing-steps" id="toc-wic-data-processing-steps" class="nav-link" data-scroll-target="#wic-data-processing-steps"><span class="header-section-number">3.2.1</span> WIC data processing steps</a></li>
+  <li><a href="#labeling-and-cleaning-data-for-export" id="toc-labeling-and-cleaning-data-for-export" class="nav-link" data-scroll-target="#labeling-and-cleaning-data-for-export"><span class="header-section-number">3.2.2</span> Labeling and Cleaning Data for Export</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -144,13 +138,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"tsimonato/gtapssp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="procedure-overview" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Procedure Overview</h1>
+<section id="procedures" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Procedures</h1>
 <p>We will go through different stages of data manipulation which include reading data from ZIP files, transforming the data format, performing interpolations, and combining data from different sources.</p>
-<section id="reading-and-transforming-data" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="reading-and-transforming-data"><span class="header-section-number">3.1</span> Reading and Transforming Data</h2>
-<section id="oecd-and-iiasa-data" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="oecd-and-iiasa-data"><span class="header-section-number">3.1.1</span> OECD and IIASA Data</h3>
+<section id="oecd-and-iiasa-data" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="oecd-and-iiasa-data"><span class="header-section-number">3.1</span> OECD and IIASA Data</h2>
 <p>Now, let’s read the data from a ZIP file, reshape it, and interpolate it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>OECD <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">read_csv_from_zip</span>(</span>
@@ -213,42 +205,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="wic-data" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="wic-data"><span class="header-section-number">3.1.2</span> WIC Data</h3>
+<section id="wic-data" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="wic-data"><span class="header-section-number">3.2</span> WIC Data</h2>
 <p>Additional processing is done for the WIC dataset. This includes transformations and analysis with the <code>interpolate_beers</code> function.</p>
-</section>
-</section>
-</section>
-<section id="wic-data-processing-steps" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> WIC data processing steps</h1>
+<section id="wic-data-processing-steps" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="wic-data-processing-steps"><span class="header-section-number">3.2.1</span> WIC data processing steps</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">read_csv_from_zip</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_dir =</span> <span class="st">"Downloads"</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_pattern =</span> <span class="st">"WIC"</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">csv_pattern =</span> <span class="st">"ssp_snapshot"</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> WIC <span class="sc">|&gt;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> dplyr<span class="sc">::</span><span class="fu">matches</span>(<span class="fu">as.character</span>(<span class="dv">1500</span><span class="sc">:</span><span class="dv">3000</span>)),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> WIC <span class="sc">|&gt;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_delim</span>(</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="st">"Variable"</span>,</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"var"</span>, <span class="st">"gender_code"</span>, <span class="st">"cohort"</span>, <span class="st">"education_level"</span>),</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">delim =</span> <span class="st">"|"</span>,</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">too_few =</span> <span class="st">"align_start"</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.integer</span>(year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">read_csv_from_zip</span>(</span>
+<span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_dir =</span> <span class="st">"Downloads"</span>,</span>
+<span id="annotated-cell-4-3"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_pattern =</span> <span class="st">"WIC"</span>,</span>
+<span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">csv_pattern =</span> <span class="st">"ssp_snapshot"</span></span>
+<span id="annotated-cell-4-5"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="annotated-cell-4-6"><a href="#annotated-cell-4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-4-7"><a href="#annotated-cell-4-7" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> WIC <span class="sc">|&gt;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-4-8" class="code-annotation-target"><a href="#annotated-cell-4-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(</span>
+<span id="annotated-cell-4-9"><a href="#annotated-cell-4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> dplyr<span class="sc">::</span><span class="fu">matches</span>(<span class="fu">as.character</span>(<span class="dv">1500</span><span class="sc">:</span><span class="dv">3000</span>)),</span>
+<span id="annotated-cell-4-10"><a href="#annotated-cell-4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
+<span id="annotated-cell-4-11"><a href="#annotated-cell-4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span></span>
+<span id="annotated-cell-4-12"><a href="#annotated-cell-4-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="annotated-cell-4-13"><a href="#annotated-cell-4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-4-14"><a href="#annotated-cell-4-14" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> WIC <span class="sc">|&gt;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-4-15" class="code-annotation-target"><a href="#annotated-cell-4-15" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_delim</span>(</span>
+<span id="annotated-cell-4-16"><a href="#annotated-cell-4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="st">"Variable"</span>,</span>
+<span id="annotated-cell-4-17"><a href="#annotated-cell-4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"var"</span>, <span class="st">"gender_code"</span>, <span class="st">"cohort"</span>, <span class="st">"education_level"</span>),</span>
+<span id="annotated-cell-4-18"><a href="#annotated-cell-4-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">delim =</span> <span class="st">"|"</span>,</span>
+<span id="annotated-cell-4-19"><a href="#annotated-cell-4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">too_few =</span> <span class="st">"align_start"</span></span>
+<span id="annotated-cell-4-20"><a href="#annotated-cell-4-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="4" onclick="event.preventDefault();" href="">4</a><span id="annotated-cell-4-21" class="code-annotation-target"><a href="#annotated-cell-4-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.integer</span>(year))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1">This command reads CSV files from a ZIP archive located in the <code>Downloads</code> directory. The function targets files with the <code>WIC</code> pattern in their name and specifically looks for files that contain <code>ssp_snapshot</code> in their name.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="8" data-code-annotation="2"><code>pivot_longer</code> transforms <code>year</code> columns from wide format to long format.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="15" data-code-annotation="3">The ‘separate_wider_delim’ function is used to split the <code>Variable</code> column into multiple columns based on a delimiter <code>|</code>. This creates new columns <code>var</code>, <code>gender_code</code>, <code>cohort</code>, and <code>education_level</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="21" data-code-annotation="4">Finally, <code>dplyr::mutate</code> is used to convert the <code>year</code> column to integer type for consistent data handling.</span>
+</dd>
+</dl>
 </div>
-<section id="joining-and-finalizing-data" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="joining-and-finalizing-data"><span class="header-section-number">4.1</span> Joining and Finalizing Data</h2>
-<p>The final stage involves merging different datasets and transforming columns to prepare our dataset to be exported.</p>
-<section id="labeling-and-cleaning-data-for-export" class="level4" data-number="4.1.0.1">
-<h4 data-number="4.1.0.1" class="anchored" data-anchor-id="labeling-and-cleaning-data-for-export"><span class="header-section-number">4.1.0.1</span> Labeling and Cleaning Data for Export</h4>
+</div>
+</section>
+<section id="labeling-and-cleaning-data-for-export" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="labeling-and-cleaning-data-for-export"><span class="header-section-number">3.2.2</span> Labeling and Cleaning Data for Export</h3>
 <p>In this step, we prepare our WIC data for export by labeling and cleaning it to ensure it’s in the correct format. This involves reading additional data sets and merging them with our main dataset.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a></span>
@@ -279,17 +286,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Finally, <code>dplyr::transmute</code> is used to transform and rename columns, resulting in a dataset ready to be exported:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  WIC <span class="sc">|&gt;</span> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">SCE =</span> Scenario,         <span class="co"># SSPs scenarios</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ISO =</span> iso,              <span class="co"># ISO country codes for geographic identification</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDU =</span> educ,             <span class="co"># Education categories, derived from 'educ'</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">GND =</span> gender,           <span class="co"># Gender information</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE =</span> age,              <span class="co"># Age groups or categories</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">YRS =</span> <span class="fu">paste0</span>(<span class="st">"Y"</span>, year),<span class="co"># Year, formatted with a 'Y' prefix</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">POP =</span> value             <span class="co"># Population growth rates</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  WIC <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">SCE =</span> Scenario,         <span class="co"># SSPs scenarios</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ISO =</span> iso,              <span class="co"># ISO country codes for geographic identification</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDU =</span> educ,             <span class="co"># Education categories, derived from 'educ'</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">GND =</span> gender,           <span class="co"># Gender information</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE =</span> age,              <span class="co"># Age groups or categories</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">YRS =</span> <span class="fu">paste0</span>(<span class="st">"Y"</span>, year),<span class="co"># Year, formatted with a 'Y' prefix</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">POP =</span> value             <span class="co"># Population growth rates</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

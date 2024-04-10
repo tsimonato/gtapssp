@@ -43,13 +43,11 @@ You can install the development version of *gtapssp* from [GitHub](https://githu
 devtools::install_github("tsimonato/gtapssp")
 ```
 
-# Procedure Overview
+# Procedures
 
 We will go through different stages of data manipulation which include reading data from ZIP files, transforming the data format, performing interpolations, and combining data from different sources.
 
-## Reading and Transforming Data
-
-### OECD and IIASA Data
+## OECD and IIASA Data
 
 Now, let's read the data from a ZIP file, reshape it, and interpolate it.
 
@@ -101,42 +99,43 @@ IIASA <- gtapssp::read_csv_from_zip(
 
 1. The `IIASA` field specifies the pattern to match the ZIP file names.
 
-### WIC Data
+## WIC Data
 
 Additional processing is done for the WIC dataset. This includes transformations and analysis with the `interpolate_beers` function.
 
-# WIC data processing steps
+### WIC data processing steps
 
 ```{r warning=FALSE}
 #| message: false
-WIC <- gtapssp::read_csv_from_zip(
+WIC <- gtapssp::read_csv_from_zip( # <1>
   zip_dir = "Downloads",
   zip_pattern = "WIC",
   csv_pattern = "ssp_snapshot"
 )
 
 WIC <- WIC |>
-  tidyr::pivot_longer(
+  tidyr::pivot_longer( # <2>
     cols = dplyr::matches(as.character(1500:3000)),
     names_to = "year",
     values_to = "value"
   )
 
 WIC <- WIC |>
-  tidyr::separate_wider_delim(
+  tidyr::separate_wider_delim( # <3>
     cols = "Variable",
     names = c("var", "gender_code", "cohort", "education_level"),
     delim = "|",
     too_few = "align_start"
   ) |>
-  dplyr::mutate(year = as.integer(year))
+  dplyr::mutate(year = as.integer(year)) # <4>
 ```
 
-## Joining and Finalizing Data
+1. This command reads CSV files from a ZIP archive located in the `Downloads` directory. The function targets files with the `WIC` pattern in their name and specifically looks for files that contain `ssp_snapshot` in their name.
+2. `pivot_longer` transforms `year` columns from wide format to long format.
+4. The 'separate_wider_delim' function is used to split the `Variable` column into multiple columns based on a delimiter `|`. This creates new columns `var`, `gender_code`, `cohort`, and `education_level`.
+5. Finally, `dplyr::mutate` is used to convert the `year` column to integer type for consistent data handling.
 
-The final stage involves merging different datasets and transforming columns to prepare our dataset to be exported.
-
-#### Labeling and Cleaning Data for Export
+### Labeling and Cleaning Data for Export
 
 In this step, we prepare our WIC data for export by labeling and cleaning it to ensure it's in the correct format. This involves reading additional data sets and merging them with our main dataset.
 
