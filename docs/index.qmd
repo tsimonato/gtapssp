@@ -23,9 +23,9 @@ editor_options:
 
 # Introduction
 
-This tutorial demonstrates the utilization of the `gtapssp` package in R for data processing. It covers various steps such as reading, transforming, and analyzing data, making it suitable for both beginners and advanced users.
+This tutorial demonstrates the utilization of the `gtapssp` package in R for data processing. It covers various steps such as reading, transforming, and analyzing data, making it suitable for both beginners and advanced users. 
 
-The *gtapssp* package is designed to be user-friendly and is accompanied by detailed [documentation](https://github.com/tsimonato/gtapssp/raw/master/docs/gtaptools_0.1.0.pdf)
+The package provides optimized and user-friendly functions to **read** data from ZIP files, **interpolate** data using **spline** and **beers** methods. The *gtapssp* functions is accompanied by detailed [manual](https://github.com/tsimonato/gtapssp/raw/master/docs/gtapssp_0.0.0.9000.pdf), you can also access this manual by running `?gtapssp` in the R console or pressing `F1` on the function name in [RStudio](https://posit.co/download/rstudio-desktop/).
 
 # Installation
 
@@ -168,7 +168,7 @@ WIC <-
   dplyr::transmute(
     SCE = Scenario,         # SSPs scenarios
     ISO = iso,              # ISO country codes for geographic identification
-    EDU = educ,             # EEducation categories, derived from 'educ'
+    EDU = educ,             # Education categories, derived from 'educ'
     GND = gender,           # Gender information
     AGE = age,              # Age groups or categories
     YRS = paste0("Y", year),# Year, formatted with a 'Y' prefix
