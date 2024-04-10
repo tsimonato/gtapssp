@@ -1,0 +1,180 @@
+---
+title: "SSPs Data Processing"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 6
+    number-sections: true
+    highlight-style: breeze
+    theme:
+      light: spacelab
+      dark: darkly
+    mermaid:
+      theme: neutral
+  pdf:
+    toc: true
+    toc-depth: 6
+    number-sections: true
+    highlight-style: breeze
+editor_options: 
+  chunk_output_type: console
+---
+
+# Introduction
+
+This tutorial demonstrates the utilization of the `gtapssp` package in R for data processing. It covers various steps such as reading, transforming, and analyzing data, making it suitable for both beginners and advanced users.
+
+The *gtapssp* package is designed to be user-friendly and is accompanied by detailed [documentation](https://github.com/tsimonato/gtapssp/raw/master/docs/gtaptools_0.1.0.pdf)
+
+# Installation
+
+To use the *gtapssp* package, it's necessary to have *R* installed on your computer, which can be downloaded from [here](https://www.r-project.org/). Additionally, we recommend downloading *RStudio*, available at [here](https://posit.co/download/rstudio-desktop/), which provides a user-friendly interface to work with *R*.
+
+You can install the development version of *gtapssp* from [GitHub](https://github.com/) with:
+
+```{r}
+#| label: install
+#| echo: true
+#| eval: false
+
+# If the devtools package is not already installed, please run the disabled line below.
+# install.packages("devtools")
+devtools::install_github("tsimonato/gtapssp")
+```
+
+# Procedure Overview
+
+We will go through different stages of data manipulation which include reading data from ZIP files, transforming the data format, performing interpolations, and combining data from different sources.
+
+## Reading and Transforming Data
+
+### OECD and IIASA Data
+
+Now, let's read the data from a ZIP file, reshape it, and interpolate it.
+
+```{r}
+OECD <- gtapssp::read_csv_from_zip( # <1>
+  zip_dir = "Downloads",
+  zip_pattern = "OECD",
+  csv_pattern = "ssp_snapshot"
+) |>
+  tidyr::pivot_longer( # <2>
+    cols = dplyr::matches(as.character(1500:3000)),
+    names_to = "year",
+    values_to = "value"
+  ) |>
+  gtapssp::interpolate_spline( # <3>
+    groups = c("Scenario", "Region"),
+    year = "year",
+    values = "value",
+    method = "fmm"
+  )
+```
+
+1. `read_csv_from_zip` reads CSV files from a ZIP archive, specifying the directory of the files, name file pattern, and name CSV pattern.
+
+2. `pivot_longer` transforms `year` columns from wide format to long format.
+
+3. `interpolate_spline` performs data interpolation for missing years using *fmm* spline method.
+
+
+We process the IIASA data similarly.
+
+```{r}
+IIASA <- gtapssp::read_csv_from_zip(
+  zip_dir = "Downloads",
+  zip_pattern = "IIASA", # <1>
+  csv_pattern = "ssp_snapshot"
+) |>
+  tidyr::pivot_longer(
+    cols = dplyr::matches(as.character(1500:3000)),
+    names_to = "year",
+    values_to = "value"
+  ) |>
+  gtapssp::interpolate_spline(
+    groups = c("Scenario", "Region"),
+    year = "year",
+    values = "value"
+  )
+```
+
+1. The `IIASA` field specifies the pattern to match the ZIP file names.
+
+### WIC Data
+
+Additional processing is done for the WIC dataset. This includes transformations and analysis with the `interpolate_beers` function.
+
+# WIC data processing steps
+
+```{r warning=FALSE}
+#| message: false
+WIC <- gtapssp::read_csv_from_zip(
+  zip_dir = "Downloads",
+  zip_pattern = "WIC",
+  csv_pattern = "ssp_snapshot"
+)
+
+WIC <- WIC |>
+  tidyr::pivot_longer(
+    cols = dplyr::matches(as.character(1500:3000)),
+    names_to = "year",
+    values_to = "value"
+  )
+
+WIC <- WIC |>
+  tidyr::separate_wider_delim(
+    cols = "Variable",
+    names = c("var", "gender_code", "cohort", "education_level"),
+    delim = "|",
+    too_few = "align_start"
+  ) |>
+  dplyr::mutate(year = as.integer(year))
+```
+
+## Joining and Finalizing Data
+
+The final stage involves merging different datasets and transforming columns to prepare our dataset to be exported.
+
+#### Labeling and Cleaning Data for Export
+
+In this step, we prepare our WIC data for export by labeling and cleaning it to ensure it's in the correct format. This involves reading additional data sets and merging them with our main dataset.
+
+```{r}
+ # <1>
+isoList_dt <- read.csv("data/isoList.csv", na.strings = "") 
+educDict_dt <- read.csv("data/educDict.csv", na.strings = "")
+cohortDict_dt <- read.csv("data/cohortDict.csv", na.strings = "")
+genderDict_dt <- read.csv("data/genderDict.csv", na.strings = "")
+
+ # <2>
+WIC <- 
+  WIC |> 
+  dplyr::left_join(isoList_dt, by = dplyr::join_by(Region)) |> 
+  dplyr::left_join(educDict_dt, by = dplyr::join_by(education_level)) |> 
+  dplyr::left_join(cohortDict_dt, by = dplyr::join_by(cohort)) |> 
+  dplyr::left_join(genderDict_dt, by = dplyr::join_by(gender_code))
+
+```
+
+1. Each `read.csv` call reads a different CSV file containing essential data. The `na.strings = ""` parameter treats empty strings as `NA` values.
+2. The WIC data is joined with the additional datasets using the `dplyr::left_join`.
+
+Finally, `dplyr::transmute` is used to transform and rename columns, resulting in a dataset ready to be exported:
+
+```{r}
+WIC <- 
+  WIC |> 
+  dplyr::transmute(
+    SCE = Scenario,         # SSPs scenarios
+    ISO = iso,              # ISO country codes for geographic identification
+    EDU = educ,             # EEducation categories, derived from 'educ'
+    GND = gender,           # Gender information
+    AGE = age,              # Age groups or categories
+    YRS = paste0("Y", year),# Year, formatted with a 'Y' prefix
+    POP = value             # Population growth rates
+  )
+
+```
+
+
