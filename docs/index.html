@@ -132,7 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>This tutorial demonstrates the utilization of the <code>gtapssp</code> package in R for data processing. It covers various steps such as reading, transforming, and analyzing data, making it suitable for both beginners and advanced users.</p>
-<p>The <em>gtapssp</em> package is designed to be user-friendly and is accompanied by detailed <a href="https://github.com/tsimonato/gtapssp/raw/master/docs/gtaptools_0.1.0.pdf">documentation</a></p>
+<p>The package provides optimized and user-friendly functions to <strong>read</strong> data from ZIP files, <strong>interpolate</strong> data using <strong>spline</strong> and <strong>beers</strong> methods. The <em>gtapssp</em> functions is accompanied by detailed <a href="https://github.com/tsimonato/gtapssp/raw/master/docs/gtapssp_0.0.0.9000.pdf">manual</a>, you can also access this manual by running <code>?gtapssp</code> in the R console or pressing <code>F1</code> on the function name in <a href="https://posit.co/download/rstudio-desktop/">RStudio</a>.</p>
 </section>
 <section id="installation" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Installation</h1>
@@ -284,7 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">SCE =</span> Scenario,         <span class="co"># SSPs scenarios</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ISO =</span> iso,              <span class="co"># ISO country codes for geographic identification</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDU =</span> educ,             <span class="co"># EEducation categories, derived from 'educ'</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDU =</span> educ,             <span class="co"># Education categories, derived from 'educ'</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">GND =</span> gender,           <span class="co"># Gender information</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE =</span> age,              <span class="co"># Age groups or categories</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">YRS =</span> <span class="fu">paste0</span>(<span class="st">"Y"</span>, year),<span class="co"># Year, formatted with a 'Y' prefix</span></span>
