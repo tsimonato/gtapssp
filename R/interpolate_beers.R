@@ -98,7 +98,7 @@ interpolate_beers <- function(input_df, groups, year, values, method = "ordinary
   out <- out[, .SD, .SDcols = c(groups, year, values)]
 
   # Assuming out is your data.table from the previous steps
-  out[, (values) := gtaptools::calc_beers(stats::na.omit(get(values)), method = eval(method)), by = groups]
+  out[, (values) := gtapssp::calc_beers(stats::na.omit(get(values)), method = eval(method)), by = groups]
 
   out <- as.data.frame(out)
 
