@@ -94,107 +94,27 @@ unique_OECD <- OECD |>
 We process the IIASA data similarly.
 
 ```{r}
-
-
-updateData <- function(outputFile, pyhtonExePath = NULL, condaenv = T){
-
-reticulate::use_python("C:\\Users\\tsimonat\\AppData\\Local\\Programs\\Python\\Python312\\python.exe")
-# or 
-# reticulate::use_condaenv()
-reticulate::py_config()
-# edit environment variables
-Sys.setenv(PYTHON = "C:\\Users\\tsimonat\\AppData\\Local\\Programs\\Python\\Python312\\python.exe")
-
-pyam <- reticulate::import("pyam")
-
-df_py <- pyam$read_iiasa("ssp")
-
-iiasa_raw <- list(
-  index = df_py$index,            # Índices do IamDataFrame
-  data = df_py$data,              # Dados da série temporal
-  meta = df_py$meta,              # Metadados
-  region = df_py$region,          # Regiões
-  variable = df_py$variable,      # Variáveis
-  unit = df_py$unit,              # Unidades
-  year = df_py$year               # Anos
-)
-
-# Save the data frame as an .rda file
-save(iiasa_raw, outputFile = "data/iiasa_raw.rda", compress = "xz")
-
-}
+pythonExePath <- "C:\\Users\\tsimonat\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+outputFile <- "data/iiasa_raw.rda"
 
 # load the data saved above
-#load("data\\iiasa_raw.rda")
+# load("data\\iiasa_raw.rda")
 
-gtapssp::updateData(pythonExePath = "C:\\Users\\tsimonat\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", outputFile = "data/iiasa_raw.rda")
-
-
-
-updateCorresp <- function(iiasa_raw = gtapssp::iiasa_raw,
-                          corresp_reg = gtapssp::corresp_reg,
-                          outputFile){
-
-
-cty_names <- unique(iiasa_raw$data$region)
-# cty_names <- gsub("\\s*\\(.*\\)", "", cty_names)
-cty_names <- cty_names[!grepl("\\(.*\\)", cty_names)]
-cty_names <- cty_names[cty_names != "World"]
-cty_names[cty_names == "Micronesia"] <- "Federated States of Micronesia"
-
-iiasa_iso3 <- data.frame(cty_names = cty_names)
-
-iiasa_iso3$reg_iso3 <- countrycode::countrycode(
-  iiasa_iso3$cty_names,
-  origin = "country.name",
-  destination = "iso3c"
+gtapssp::updateData(
+  pythonExePath = pythonExePath,
+  outputFile = outputFile
 )
-iiasa_iso3 <- unique(iiasa_iso3)
 
-iiasa_iso3 <- iiasa_raw$data$region |> 
-  unique() |> 
-  data.frame(cty_names = _) |> 
-  dplyr::filter(!grepl("\\(.*\\)", cty_names), cty_names != "World") |> 
-  dplyr::mutate(
-    cty_names = ifelse(cty_names == "Micronesia", 
-                       "Federated States of Micronesia", 
-                       cty_names),
-    reg_iso3 = countrycode::countrycode(
-      cty_names, 
-      origin = "country.name", 
-      destination = "iso3c"
-    )
-  ) |> 
-  unique()
 
-# read corresp_reg.csv in data folder
-corresp_iiasa <- corresp_reg |> 
-  dplyr::right_join(iiasa_iso3)
+gtapssp::updateCorresp(
+  iiasa_raw = gtapssp::iiasa_raw,
+  corresp_reg = gtapssp::corresp_reg
+)
 
-save(corresp_iiasa, file = outputFile)
+# tentar inverter
+group_cols <- c("model", "scenario", "reg_iso3", "variable", "unit")
 
-}
-
-gtapssp::updateCorresp(iiasa_raw = gtapssp::iiasa_raw,
-                          corresp_reg = gtapssp::corresp_reg)
-
-save(corresp_reg, file = "data\\corresp_reg.rda")
-
-# read the data saved above
-load("data\\corresp_reg.rda")
-iiasa_raw = gtapssp::iiasa_raw
-corresp_reg = gtapssp::corresp_reg
-
-# ?gtapssp::updateCorresp
-# 
-# 
-# cty_mappings <- gtapssp::txtToData("data\\gtp10_10.agg")$`Section 4`
-# 
-# aggTxtFile <- "data\\gtp10_10.agg"
-
-group_cols = c("model", "scenario", "reg_gtap_code", "variable", "unit")
-
-agg_iiasa <- gtapssp::aggData(group_cols=group_cols)
+agg_iiasa <- gtapssp::aggData(group_cols = group_cols)
 
 # Aplicar a função interpolate_spline
 spline_out <- agg_iiasa |>
@@ -204,41 +124,508 @@ spline_out <- agg_iiasa |>
     groups = group_cols,
     year = "year",
     values = "value"
-  ) 
+  )
 
 # Aplicar a função interpolate_beers
 beers_out <- agg_iiasa |>
   dplyr::filter(model %in% c("IIASA-WiC POP 2023")) |>
+  dplyr::filter(!grepl("^Mean Years of Education", variable)) |>
   gtapssp::interpolate_beers(
     groups = group_cols,
     year = "year",
     values = "value"
   )
-
-# combine vertically the two outputs and expand variable column
-gtap_ssp <- dplyr::bind_rows(beers_out, spline_out) |>
+beers_out <- beers_out |>
   tidyr::separate_wider_delim( # <3>
     cols = "variable",
-    names = c("variable", "gender", "cohort", "education_level"),
+    names = c("variable", "gender_code", "cohort", "education_level"),
     delim = "|",
     too_few = "align_start"
   )
 
+# combine vertically the two outputs
+gtap_ssp <- dplyr::bind_rows(beers_out, spline_out)
+
+
+exp_hist <- gtap_ssp |>
+  dplyr::filter(scenario == "Historical Reference") |> # Select scenario "Historical Reference" and exclude that column
+  dplyr::select(-scenario) |>
+  tidyr::expand_grid(scenario = unique(gtap_ssp$scenario)) # Create a new scenario colummn Expanded to all 5 SSPs categories
+
+# Bind the data sets
 gtap_ssp <- gtap_ssp |>
-  dplyr::filter(
-    model != "IIASA-WiC POP 2023" |
-    !is.na(education_level) | # Exkuir totais (NA)
-    scenario == "Historical Reference" | # Nesse cenario so tem NA em educatio_level
-    cohort %in% c("Age 0-4", "Age 5-9", "Age 10-14")) # Essas categorias so tem NA (TOtais) pois nao tem abertura por educatio_level
+  dplyr::anti_join(dplyr::select(exp_hist, -value)) |> # exclude overlappings between SSPs and Historical Reference data
+  dplyr::bind_rows(exp_hist) |>
+  dplyr::filter(scenario != "Historical Reference") # exclude the old "Historical Reference" set
+# Identify unique groups in gtap_ssp
+group_columns <- setdiff(names(gtap_ssp), c("scenario", "reg_iso3", "year", "value"))
+unique_groups <- gtap_ssp |>
+  dplyr::select(dplyr::all_of(group_columns)) |>
+  dplyr::distinct()
+
+# Create all combinations of groups with required_regions
+complete_data <- unique_groups |>
+  tidyr::expand_grid(reg_iso3 = unique(gtapssp::corresp_reg$reg_iso3)) |>
+  tidyr::expand_grid(year = unique(gtap_ssp$year)) |>
+  tidyr::expand_grid(scenario = unique(gtap_ssp$scenario))
+
+# Ensure all combinations exist in gtap_ssp
+gtap_ssp <- complete_data |>
+  dplyr::left_join(gtap_ssp, by = c(group_columns,"scenario", "reg_iso3", "year")) |>
+  dplyr::mutate(value = tidyr::replace_na(value, 0)) # Fill missing values with 0
 
 
-gtap_ssp <- gtapssp::growth_rate(data = gtap_ssp)
+isoList_dt <- read.csv("data/isoList.csv", na.strings = "") # <1>
+educDict_dt <- read.csv("data/educDict.csv", na.strings = "")
+cohortDict_dt <- read.csv("data/cohortDict.csv", na.strings = "")
+genderDict_dt <- read.csv("data/genderDict.csv", na.strings = "")
+
+gtap_ssp2 <-
+  gtap_ssp |>
+  # dplyr::left_join(isoList_dt, by = dplyr::join_by(Region)) |>  # <2>
+  dplyr::left_join(educDict_dt, by = dplyr::join_by(education_level)) |>
+  dplyr::left_join(cohortDict_dt, by = dplyr::join_by(cohort)) |>
+  dplyr::left_join(genderDict_dt, by = dplyr::join_by(gender_code))
+
+gtap_ssp2 <-
+  gtap_ssp2 |>
+  dplyr::mutate(
+    MOD = model,
+    VAR = variable,
+    SCE = scenario, # SSPs scenarios
+    ISO = reg_iso3, # ISO country codes for geographic identification
+    # EDU = educ,             # Education categories, derived from 'educ'
+    GND = gender, # Gender information
+    AGE = age, # Age groups or categories
+    YRS = paste0("Y", year), # Year, formatted with a 'Y' prefix
+    POP = value, # Population values
+    .keep = "none"
+  )
+
+gtap_ssp2 <-
+  gtap_ssp2 |>
+  dplyr::mutate(
+    GND = tidyr::replace_na(GND, "TOTL"),
+    AGE = tidyr::replace_na(AGE, "TOTL"),
+    # EDU = tidyr::replace_na(EDU, "TOTL")
+  )
+
+
+# gtap_ssp <- gtap_ssp |>
+#   dplyr::filter(
+#     model != "IIASA-WiC POP 2023" |
+#     !is.na(education_level) | # Exkuir totais (NA)
+#     scenario == "Historical Reference" | # Nesse cenario so tem NA em educatio_level
+#     cohort %in% c("Age 0-4", "Age 5-9", "Age 10-14")) # Essas categorias so tem NA (TOtais) pois nao tem abertura por educatio_level
+
+
+data_write <- gtap_ssp2 |>
+  dplyr::mutate(
+    VAR = dplyr::case_when(
+      VAR == "GDP|PPP" ~ "GDP_PPP",
+      VAR == "GDP|PPP [per capita]" ~ "GDP_PER_CAPI",
+      TRUE ~ VAR # Keep other values unchanged
+    ),
+    # Multiply POP by 1000 if VAR is GDP_PPP
+    POP = ifelse(VAR == "GDP_PPP", POP * 1000, POP)
+  )
+
+POP <- data_write |>
+  dplyr::filter(MOD == "IIASA-WiC POP 2023") |>
+  dplyr::filter(GND != "TOTL") |>
+  dplyr::group_by(SCE, ISO, GND, YRS, AGE) |>
+  dplyr::summarise(POP = sum(POP, na.rm = T))
+
+GDPI = data_write |> 
+  tidyr::complete(MOD, VAR, SCE, ISO, YRS, fill = list(POP = 0)) |>
+       dplyr::filter(MOD == "IIASA GDP 2023") |> 
+        dplyr::filter(VAR != "Population") |> 
+       dplyr::group_by(VAR, SCE, ISO, YRS) |> 
+  dplyr::summarise(GDPI = sum(POP, na.rm = T))
+
+GDPO <- data_write |>
+  dplyr::filter(MOD == "OECD ENV-Growth 2023") |>
+  dplyr::group_by(VAR, SCE, ISO, YRS) |>
+  dplyr::summarise(GDPO = sum(POP, na.rm = T))
+
+
+data <- list(
+  POP = array(
+    POP |>
+      dplyr::pull(POP),
+    dim = rev(sapply(POP |> dplyr::select(-POP), function(x) length(unique(x)))),
+    dimnames = rev(lapply(POP |> dplyr::select(-POP), function(x) unique(x)))
+  ) |> aperm(rev(1:(length(POP) - 1))),
+  GDPI = array(
+    GDPI |>
+      dplyr::pull(GDPI),
+    dim = rev(sapply(GDPI |> dplyr::select(-GDPI), function(x) length(unique(x)))),
+    dimnames = rev(lapply(GDPI |> dplyr::select(-GDPI), function(x) unique(x)))
+  ) |> aperm(rev(1:(length(GDPI) - 1))),
+  GDPO = array(
+    GDPO |>
+      dplyr::pull(GDPO),
+    dim = rev(sapply(GDPO |> dplyr::select(-GDPO), function(x) length(unique(x)))),
+    dimnames = rev(lapply(GDPO |> dplyr::select(-GDPO), function(x) unique(x)))
+  ) |> aperm(rev(1:(length(GDPO) - 1)))
+)
+
+attr(data$POP, "description") <- "IIASA-WiC POP 2023 (million people)"
+attr(data$GDPI, "description") <- "IIASA GDP 2023 (USD_2017/yr)"
+attr(data$GDPO, "description") <- "OECD ENV-Growth 2023 (USD_2017/yr)"
+
+
+HARr::write_har(data, "WIC.har")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+coffeer::har_write(
+  headers = list(
+    GDPI = list(
+      data = gtap_ssp3_summary |>
+  dplyr::filter(MOD == "IIASA GDP 2023"),
+      values = "POP",
+      sets = c("SCE", "ISO", #"EDU", "GND", "AGE",
+               "YRS"),
+      coeff = "GDPI",
+      name = "IIASA GDP 2023 (billion USD_2017/yr)"
+    ),
+  
+    GDPO = list(
+      data = gtap_ssp3_summary |>
+  dplyr::filter(MOD == "OECD ENV-Growth 2023"),
+      values = "POP",
+      sets = c("SCE", "ISO", #"EDU", "GND", "AGE",
+               "YRS"),
+      coeff = "GDPO",
+      name = "OECD ENV-Growth 2023 (billion USD_2017/yr)"
+    )#,
+  
+  #   WIC = list(
+  #     data = gtap_ssp3_summary |>
+  # dplyr::filter(POP == "IIASA-WiC POP 2023"),
+  #     values = "POP",
+  #     sets = c("SCE", "ISO", "EDU", "GND", "AGE",
+  #              "YRS"),
+  #     coeff = "POP",
+  #     name = "WIC"
+  #   )
+  ),
+  output_har = "WIC3.har"
+)
+
+
+# gtap_ssp3_summary <- gtap_ssp2 |>
+#     dtplyr::lazy_dt() |> 
+#   dplyr::filter(MOD == "IIASA-WiC POP 2023") |> 
+# 
+#   dplyr::group_by(MOD, SCE, ISO, EDU, GND, AGE, 
+#                   YRS) |>
+#   dplyr::summarize(
+#     POP = sum(POP, na.rm = TRUE), # Sum 'value' for each group
+#    #count = dplyr::n(),                    # Count number of rows in each group (optional)
+#     .groups = "drop"                       # Ungroup after summarization
+#   ) |>
+#   as.data.frame()
+
+coffeer::har_write(
+  headers = list(
+    POP = list(
+      data = data |>
+  dplyr::filter(MOD == "IIASA-WiC POP 2023"),
+      values = "POP",
+      sets = c("SCE", "ISO", #"EDU",
+               "GND",
+               "AGE",
+               "YRS"),
+      coeff = "POP",
+      name = "IIASA-WiC POP 2023 (million people)"
+    )
+  ),
+  output_har = "WIC_POP.har"
+)
+
+gtaptools::har_shape(
+  input_data = list(list(
+    input_data = gtap_ssp2 |>
+  dplyr::filter(MOD == "IIASA-WiC POP 2023"), # <1>
+    header = quote( # <2>
+      `POP`[c( # <3>
+      "SCE",
+      "ISO",
+      #"EDU",
+      "GND", # <4>
+      "AGE",
+      "YRS"
+    )])
+  )),
+  output_har_file = "ssp3_gdp3.har" # <5>
+)
+
+gtap_ssp3_summary$AGE |> unique()
+
+
+coffeer::har_write(
+  headers = list(
+    WIC = list(
+      data = gtap_ssp2 |>
+  dplyr::filter(MOD == "IIASA-WiC POP 2023"),
+      values = "POP",
+      sets = c("SCE", "ISO",# "EDU",
+               "GND", "AGE",
+               "YRS"),
+      coeff = "POP",
+      name = "WIC"
+    )
+  ),
+  output_har = "WIC2.har"
+)
+
+
+
+
+
+test_har <- HARr::read_har("WIC3.har", toLowerCase =F)$LSHK |> as.data.frame.table()
+
+
+test_har <- test_har |> 
+  dplyr::filter(SCE == "SSP1", ISO == "USA", GND=="FEML", EDU == "NONE", YRS == "Y2023") |> 
+  dplyr::pull(Freq)
+
+
+test_data_write <- data_write |> 
+  dplyr::filter(SCE == "SSP1", ISO == "USA", GND=="FEML", EDU == "NONE", YRS == "Y2023") |> 
+  dplyr::pull(POP)
+  
+
+
+ascasc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Define the columns to permute
+columns <- c("SCE", "ISO", "GND",
+             "EDU", "YRS")
+
+# Generate all permutations of the column order
+column_permutations <- gtools::permutations(n = length(columns), r = length(columns), v = columns)
+
+# Initialize result
+correct_order_select <- NULL
+correct_order_arrange <- NULL
+
+# Iterate over permutations for select and arrange
+for (select_perm in seq_len(nrow(column_permutations))) {
+  select_order <- column_permutations[select_perm, ]
+  # select_order <- c("SCE", "ISO", #"GND",
+  #            "EDU", "YRS")
+  for (arrange_perm in seq_len(nrow(column_permutations))) {
+    arrange_order <- column_permutations[arrange_perm, ]
+    # arrange_order <- c("SCE", "ISO", #"GND",
+    #          "EDU", "YRS")
+    
+    # Arrange data by current select and arrange permutation
+    data <- data_write |> 
+      dplyr::select(dplyr::all_of(c(select_order, "POP"))) |> # Change select order
+      dplyr::arrange(dplyr::across(dplyr::all_of(arrange_order)))
+    
+    # Create HAR file
+    har_data <- list(
+      LSHK = array(
+        data |> dplyr::pull(POP),
+        dim = rev(sapply(data |> dplyr::select(-POP), function(x) length(unique(x)))),
+        dimnames = rev(lapply(data |> dplyr::select(-POP), function(x) unique(x)))
+      ) |> aperm(rev(seq_along(arrange_order)))
+    )
+    
+    HARr::write_har(har_data, "WIC4.har")
+    
+    # Read and validate
+    test_har <- HARr::read_har("WIC4.har", toLowerCase = FALSE)$LSHK |> as.data.frame.table()
+   test_har <-  test_har |> 
+      dplyr::left_join(data, by = columns)
+   
+   test_result <- all(abs(round(test_har$Freq, 3) - round(test_har$POP, 3)) <= 1e-2, 
+                      na.rm = TRUE)
+    
+#    # Find mismatched rows
+# mismatched_rows <- test_har |>
+#   dplyr::filter(
+#     abs(Freq - POP) > 1e-2 |  # Allow a small tolerance for floating-point precision
+#       (is.na(Freq) != is.na(POP))  # Mismatched NA statuses
+#   )
+   
+    # Check if test_har equals test_data_write
+    if (test_result) {
+      correct_order_select <- select_order
+      correct_order_arrange <- arrange_order
+      cat("Matching orders found:\n")
+      cat("Select order:", paste(correct_order_select, collapse = ", "), "\n")
+      cat("Arrange order:", paste(correct_order_arrange, collapse = ", "), "\n")
+      break  # Exit both loops
+    }
+  }
+}
+
+# If no match is found
+if (is.null(correct_order_select) || is.null(correct_order_arrange)) {
+  cat("No matching orders found.\n")
+} else {
+  cat("Correct select order is:", paste(correct_order_select, collapse = ", "), "\n")
+  cat("Correct arrange order is:", paste(correct_order_arrange, collapse = ", "), "\n")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+dtplyr::lazy_dt()
+
+
+
+
+
+dplyr::group_by()
+
+
+
+#gtap_ssp <- gtapssp::growth_rate(data = gtap_ssp)
 
 
 final_data <- gtapssp::iiasa_gtap(
    aggTxtFile = "data/gtp10_10.agg",
    outFile = "data/output.csv"
  )
+
+
+
+
+
+
+
+
+gtapssp::corresp_reg$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Expanding grid for all combinations of country codes and years
+grid <- expand.grid(
+  model = unique(gtap_ssp$model)
+  reg_gtap_code = unique(gtapssp::corresp_reg$reg_gtap_code),
+  year = unique(gtap_ssp$year),
+  scenario = c("SSP1", "SSP2", "SSP3", "SSP4", "SSP5")
+)
+
+
+
+
+
+
+
+unique(spline_out$year) |> sort()
+
+
+
+
+
+names(gtap_ssp)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -315,7 +702,6 @@ gtap_ssp <- gtap_ssp |>
 return(gtap_ssp)
 
 }
-
 
 
 
