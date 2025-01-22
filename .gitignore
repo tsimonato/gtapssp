@@ -54,3 +54,7 @@ Downloads/
 docs/data/
 docs/Downloads/
 setup.R
+*.har
+*.xlsx
+data/iiasa_raw.rda
+data/output.csv
