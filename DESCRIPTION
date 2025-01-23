@@ -18,7 +18,10 @@ Imports:
     dplyr,
     tidyr,
     HARr,
-    tools
+    tools,
+    reticulate,
+    countrycode,
+    rlang
 Remotes:
-    github::USDA-ERS/MTED-HARr    
+    github::USDA-ERS/MTED-HARr 
     

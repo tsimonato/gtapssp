@@ -11,10 +11,10 @@
 #'                 in subdivision, similar smoothing occurs.
 #' @return A numeric vector with interpolated or subdivided values.
 #' @examples
-#' calc_beers(c(1, 2, 3, 4, 5), "ordinary")
-#' calc_beers(c(1, 2, 3, 4, 5), "modified")
-#' calc_beers(c(1, 2, 3, 4, 5), "subidvision_ordinary")
-#' calc_beers(c(1, 2, 3, 4, 5), "subidvision_modified")
+#' calc_beers(c(1, 2, 3, 4, 5, 6), "ordinary")
+#' calc_beers(c(1, 2, 3, 4, 5, 6), "modified")
+#' calc_beers(c(1, 2, 3, 4, 5, 6), "subidvision_ordinary")
+#' calc_beers(c(1, 2, 3, 4, 5, 6), "subidvision_modified")
 #' @export
 
 calc_beers <- function(values, method = "ordinary") {
