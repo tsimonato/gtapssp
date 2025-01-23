@@ -105,7 +105,7 @@ You can install the development version of *gtapssp* from [GitHub](https://githu
 devtools::install_github("tsimonato/gtapssp")
 ```
 
-# Quick Start: Run the Entire Pipeline
+# One-Line Workflow
 
 If you'd like to execute the entire pipeline described in this tutorial with minimal effort, you can use the `gtapssp::iiasa_gtap()` function. This function runs all steps, including data aggregation, interpolation, expansion, label merging, and optional file exports. 
 

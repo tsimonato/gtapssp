@@ -78,10 +78,11 @@ final_data <- gtapssp::iiasa_gtap(outFile = "gtap_ssp.har")
 
 This package relies on projections from the **Shared Socioeconomic Pathways (SSPs)** developed by **IIASA**. The default dataset (`gtapssp::iiasa_raw`) can be updated using the `updateData()` function to fetch newer versions from the [IIASA SSP database](https://data.ece.iiasa.ac.at/ssp).
 
-## 📦 Example Usage
+## 📦 One-Line Workflow
+
+The gtapssp::iiasa_gtap() function provides a one-liner to execute the entire SSP data processing pipeline. This includes data aggregation, interpolation, expansion, label standardization, and optional export to .har or .csv formats.
 
 ```R
-# Process data and save as .har file
 gtapssp::iiasa_gtap(outFile = "gtap_ssp.har")
 ```
 
