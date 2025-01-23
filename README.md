@@ -69,44 +69,6 @@ Combine interpolated datasets, expand scenarios, and prepare outputs:
 final_data <- gtapssp::iiasa_gtap(outFile = "gtap_ssp.har")
 ```
 
-## 🏗️ Workflow Overview
-
-The pipeline involves the following steps:
-
-```mermaid
-| label: workflow-pipeline
-| fig-width: 8 
-| fig-height: 6 
-graph TD
-
-subgraph s1["Step 1"]
-    R4[IIASA raw data] --> D[Summarise Data]
-    R5[Regional correspondences] --> D[Summarise Data: gtapssp::aggData]
-    D([Summarise Data])
-    D --> E1([Interpolate GDP data: gtapssp::interpolate_spline])
-    D --> E2([Interpolate POP data: gtapssp::interpolate_beers])
-end
-
-subgraph s2["Step 2"]
-    E1 --> F([Expand data])
-    E2 --> F
-end
-
-subgraph s3["Step 3"]
-    F --> G([Join labels])
-end
-
-subgraph s4["Step 4"]
-    G --> H([Cleaning data])
-end
-
-subgraph s5["Step 5"]
-    H --> I([Preparing final output to export])
-end
-
-I --> K([.har file for GTAP])
-```
-
 ## 🌐 Data Source
 
 This package relies on projections from the **Shared Socioeconomic Pathways (SSPs)** developed by **IIASA**. The default dataset (`gtapssp::iiasa_raw`) can be updated using the `updateData()` function to fetch newer versions from the [IIASA SSP database](https://data.ece.iiasa.ac.at/ssp).
