@@ -2,6 +2,7 @@
 
 export(aggData)
 export(calc_beers)
+export(csvtorda)
 export(growth_rate)
 export(iiasa_gtap)
 export(interpolate_beers)

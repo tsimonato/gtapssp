@@ -2,13 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.484">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-04-10">
+<meta name="author" content="Thiago Simonato">
+<meta name="dcterms.date" content="2025-01-22">
 
-<title>SSPs Data Processing</title>
+<title>GTAPSSP: Tools for Processing SSPs in the GTAP Framework</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -34,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -84,15 +85,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
   <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation"><span class="header-section-number">2</span> Installation</a></li>
-  <li><a href="#procedures" id="toc-procedures" class="nav-link" data-scroll-target="#procedures"><span class="header-section-number">3</span> Procedures</a>
-  <ul>
-  <li><a href="#oecd-and-iiasa-data" id="toc-oecd-and-iiasa-data" class="nav-link" data-scroll-target="#oecd-and-iiasa-data"><span class="header-section-number">3.1</span> OECD and IIASA Data</a></li>
-  <li><a href="#wic-data" id="toc-wic-data" class="nav-link" data-scroll-target="#wic-data"><span class="header-section-number">3.2</span> WIC Data</a>
-  <ul>
-  <li><a href="#wic-data-processing-steps" id="toc-wic-data-processing-steps" class="nav-link" data-scroll-target="#wic-data-processing-steps"><span class="header-section-number">3.2.1</span> WIC data processing steps</a></li>
-  <li><a href="#labeling-and-cleaning-data-for-export" id="toc-labeling-and-cleaning-data-for-export" class="nav-link" data-scroll-target="#labeling-and-cleaning-data-for-export"><span class="header-section-number">3.2.2</span> Labeling and Cleaning Data for Export</a></li>
-  </ul></li>
-  </ul></li>
+  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link" data-scroll-target="#workflow-overview"><span class="header-section-number">3</span> Workflow Overview</a></li>
+  <li><a href="#step-1-update-and-load-the-data" id="toc-step-1-update-and-load-the-data" class="nav-link" data-scroll-target="#step-1-update-and-load-the-data"><span class="header-section-number">4</span> Step 1: Update and Load the Data</a></li>
+  <li><a href="#step-2-preprocessing-and-aggregation" id="toc-step-2-preprocessing-and-aggregation" class="nav-link" data-scroll-target="#step-2-preprocessing-and-aggregation"><span class="header-section-number">5</span> Step 2: Preprocessing and Aggregation</a></li>
+  <li><a href="#step-3-scenario-expansion" id="toc-step-3-scenario-expansion" class="nav-link" data-scroll-target="#step-3-scenario-expansion"><span class="header-section-number">6</span> Step 3: Scenario Expansion</a></li>
+  <li><a href="#step-4-final-data-transformation" id="toc-step-4-final-data-transformation" class="nav-link" data-scroll-target="#step-4-final-data-transformation"><span class="header-section-number">7</span> Step 4: Final Data Transformation</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
 </div>
@@ -100,18 +97,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">SSPs Data Processing</h1>
+<h1 class="title">GTAPSSP: Tools for Processing SSPs in the GTAP Framework</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thiago Simonato </p>
+          </div>
+  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 10, 2024</p>
+      <p class="date">January 22, 2025</p>
     </div>
   </div>
   
@@ -131,175 +134,135 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installation" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Installation</h1>
 <p>To use the <em>gtapssp</em> package, it’s necessary to have <em>R</em> installed on your computer, which can be downloaded from <a href="https://www.r-project.org/">here</a>. Additionally, we recommend downloading <em>RStudio</em>, available at <a href="https://posit.co/download/rstudio-desktop/">here</a>, which provides a user-friendly interface to work with <em>R</em>.</p>
-<p>You can install the development version of <em>gtapssp</em> from <a href="https://github.com/">GitHub</a> with:</p>
+<p>You can install the development version of <em>gtapssp</em> from <a href="https://github.com/tsimonato/gtapssp">GitHub</a> with:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If the devtools package is not already installed, please run the disabled line below.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("devtools")</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"tsimonato/gtapssp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"tsimonato/coffeer"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"tsimonato/gtapssp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="procedures" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Procedures</h1>
-<p>We will go through different stages of data manipulation which include reading data from ZIP files, transforming the data format, performing interpolations, and combining data from different sources.</p>
-<section id="oecd-and-iiasa-data" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="oecd-and-iiasa-data"><span class="header-section-number">3.1</span> OECD and IIASA Data</h2>
-<p>Now, let’s read the data from a ZIP file, reshape it, and interpolate it.</p>
+<section id="workflow-overview" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Workflow Overview</h1>
+<p>The pipeline involves the following steps:</p>
+<ol type="1">
+<li><strong>Updating the Data</strong>: Fetch and update raw datasets.</li>
+<li><strong>Preprocessing and Aggregation</strong>: Interpolate and clean data.</li>
+<li><strong>Scenario Expansion</strong>: Expand datasets to include all scenarios.</li>
+<li><strong>Final Data Transformation</strong>: Combine, transform, and format datasets.</li>
+</ol>
+</section>
+<section id="step-1-update-and-load-the-data" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Step 1: Update and Load the Data</h1>
+<p>First, ensure that you have Python installed and accessible. Use the <code>gtapssp::updateData</code> function to update the raw dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>OECD <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">read_csv_from_zip</span>(</span>
-<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_dir =</span> <span class="st">"Downloads"</span>,</span>
-<span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_pattern =</span> <span class="st">"OECD"</span>,</span>
-<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">csv_pattern =</span> <span class="st">"ssp_snapshot"</span></span>
-<span id="annotated-cell-2-5"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-2-6" class="code-annotation-target"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(</span>
-<span id="annotated-cell-2-7"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> dplyr<span class="sc">::</span><span class="fu">matches</span>(<span class="fu">as.character</span>(<span class="dv">1500</span><span class="sc">:</span><span class="dv">3000</span>)),</span>
-<span id="annotated-cell-2-8"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
-<span id="annotated-cell-2-9"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span></span>
-<span id="annotated-cell-2-10"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-2-11" class="code-annotation-target"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a>  gtapssp<span class="sc">::</span><span class="fu">interpolate_spline</span>(</span>
-<span id="annotated-cell-2-12"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">"Scenario"</span>, <span class="st">"Region"</span>),</span>
-<span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="st">"year"</span>,</span>
-<span id="annotated-cell-2-14"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"value"</span>,</span>
-<span id="annotated-cell-2-15"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"fmm"</span></span>
-<span id="annotated-cell-2-16"><a href="#annotated-cell-2-16" aria-hidden="true" tabindex="-1"></a>  )</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-annotation">
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1"><code>read_csv_from_zip</code> reads CSV files from a ZIP archive, specifying the directory of the files, name file pattern, and name CSV pattern.</span>
-</dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="6" data-code-annotation="2"><code>pivot_longer</code> transforms <code>year</code> columns from wide format to long format.</span>
-</dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="11" data-code-annotation="3"><code>interpolate_spline</code> performs data interpolation for missing years using <em>fmm</em> spline method.</span>
-</dd>
-</dl>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the Python executable path and output file location</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pythonExePath <span class="ot">&lt;-</span> <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">tsimonat</span><span class="sc">\\</span><span class="st">AppData</span><span class="sc">\\</span><span class="st">Local</span><span class="sc">\\</span><span class="st">Programs</span><span class="sc">\\</span><span class="st">Python</span><span class="sc">\\</span><span class="st">Python312</span><span class="sc">\\</span><span class="st">python.exe"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>outputFile <span class="ot">&lt;-</span> <span class="st">"data/iiasa_raw.rda"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Update raw data</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># gtapssp::updateData(</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   pythonExePath = pythonExePath,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   outputFile = outputFile</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<p>We process the IIASA data similarly.</p>
+<p>Update regional correspondence using <code>updateCorresp</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>IIASA <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">read_csv_from_zip</span>(</span>
-<span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_dir =</span> <span class="st">"Downloads"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-3-3" class="code-annotation-target"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_pattern =</span> <span class="st">"IIASA"</span>,</span>
-<span id="annotated-cell-3-4"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">csv_pattern =</span> <span class="st">"ssp_snapshot"</span></span>
-<span id="annotated-cell-3-5"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-3-6"><a href="#annotated-cell-3-6" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(</span>
-<span id="annotated-cell-3-7"><a href="#annotated-cell-3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> dplyr<span class="sc">::</span><span class="fu">matches</span>(<span class="fu">as.character</span>(<span class="dv">1500</span><span class="sc">:</span><span class="dv">3000</span>)),</span>
-<span id="annotated-cell-3-8"><a href="#annotated-cell-3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
-<span id="annotated-cell-3-9"><a href="#annotated-cell-3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span></span>
-<span id="annotated-cell-3-10"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-3-11"><a href="#annotated-cell-3-11" aria-hidden="true" tabindex="-1"></a>  gtapssp<span class="sc">::</span><span class="fu">interpolate_spline</span>(</span>
-<span id="annotated-cell-3-12"><a href="#annotated-cell-3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> <span class="fu">c</span>(<span class="st">"Scenario"</span>, <span class="st">"Region"</span>),</span>
-<span id="annotated-cell-3-13"><a href="#annotated-cell-3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="st">"year"</span>,</span>
-<span id="annotated-cell-3-14"><a href="#annotated-cell-3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"value"</span></span>
-<span id="annotated-cell-3-15"><a href="#annotated-cell-3-15" aria-hidden="true" tabindex="-1"></a>  )</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-annotation">
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="3" data-code-annotation="1">The <code>IIASA</code> field specifies the pattern to match the ZIP file names.</span>
-</dd>
-</dl>
-</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update regional correspondence</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># gtapssp::updateCorresp(</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   iiasa_raw = gtapssp::iiasa_raw,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   corresp_reg = gtapssp::corresp_reg</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="wic-data" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="wic-data"><span class="header-section-number">3.2</span> WIC Data</h2>
-<p>Additional processing is done for the WIC dataset. This includes transformations and analysis with the <code>interpolate_beers</code> function.</p>
-<section id="wic-data-processing-steps" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="wic-data-processing-steps"><span class="header-section-number">3.2.1</span> WIC data processing steps</h3>
+<section id="step-2-preprocessing-and-aggregation" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Step 2: Preprocessing and Aggregation</h1>
+<p>Aggregate the raw dataset and prepare it for interpolation:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">read_csv_from_zip</span>(</span>
-<span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_dir =</span> <span class="st">"Downloads"</span>,</span>
-<span id="annotated-cell-4-3"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_pattern =</span> <span class="st">"WIC"</span>,</span>
-<span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">csv_pattern =</span> <span class="st">"ssp_snapshot"</span></span>
-<span id="annotated-cell-4-5"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="annotated-cell-4-6"><a href="#annotated-cell-4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-4-7"><a href="#annotated-cell-4-7" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> WIC <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-4-8" class="code-annotation-target"><a href="#annotated-cell-4-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(</span>
-<span id="annotated-cell-4-9"><a href="#annotated-cell-4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> dplyr<span class="sc">::</span><span class="fu">matches</span>(<span class="fu">as.character</span>(<span class="dv">1500</span><span class="sc">:</span><span class="dv">3000</span>)),</span>
-<span id="annotated-cell-4-10"><a href="#annotated-cell-4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"year"</span>,</span>
-<span id="annotated-cell-4-11"><a href="#annotated-cell-4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span></span>
-<span id="annotated-cell-4-12"><a href="#annotated-cell-4-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="annotated-cell-4-13"><a href="#annotated-cell-4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-4-14"><a href="#annotated-cell-4-14" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> WIC <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-4-15" class="code-annotation-target"><a href="#annotated-cell-4-15" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_delim</span>(</span>
-<span id="annotated-cell-4-16"><a href="#annotated-cell-4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="st">"Variable"</span>,</span>
-<span id="annotated-cell-4-17"><a href="#annotated-cell-4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"var"</span>, <span class="st">"gender_code"</span>, <span class="st">"cohort"</span>, <span class="st">"education_level"</span>),</span>
-<span id="annotated-cell-4-18"><a href="#annotated-cell-4-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">delim =</span> <span class="st">"|"</span>,</span>
-<span id="annotated-cell-4-19"><a href="#annotated-cell-4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">too_few =</span> <span class="st">"align_start"</span></span>
-<span id="annotated-cell-4-20"><a href="#annotated-cell-4-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="4" onclick="event.preventDefault();" href="">4</a><span id="annotated-cell-4-21" class="code-annotation-target"><a href="#annotated-cell-4-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.integer</span>(year))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-annotation">
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1">This command reads CSV files from a ZIP archive located in the <code>Downloads</code> directory. The function targets files with the <code>WIC</code> pattern in their name and specifically looks for files that contain <code>ssp_snapshot</code> in their name.</span>
-</dd>
-<dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="8" data-code-annotation="2"><code>pivot_longer</code> transforms <code>year</code> columns from wide format to long format.</span>
-</dd>
-<dt data-target-cell="annotated-cell-4" data-target-annotation="3">3</dt>
-<dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="15" data-code-annotation="3">The ‘separate_wider_delim’ function is used to split the <code>Variable</code> column into multiple columns based on a delimiter <code>|</code>. This creates new columns <code>var</code>, <code>gender_code</code>, <code>cohort</code>, and <code>education_level</code>.</span>
-</dd>
-<dt data-target-cell="annotated-cell-4" data-target-annotation="4">4</dt>
-<dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="21" data-code-annotation="4">Finally, <code>dplyr::mutate</code> is used to convert the <code>year</code> column to integer type for consistent data handling.</span>
-</dd>
-</dl>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define grouping columns</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>group_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"model"</span>, <span class="st">"scenario"</span>, <span class="st">"reg_iso3"</span>, <span class="st">"variable"</span>, <span class="st">"unit"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate raw data</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>agg_iiasa <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">aggData</span>(<span class="at">group_cols =</span> group_cols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Apply interpolation methods to smooth data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpolate with spline method</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>spline_out <span class="ot">&lt;-</span> agg_iiasa <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>(model) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(model <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"IIASA GDP 2023"</span>, <span class="st">"OECD ENV-Growth 2023"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  gtapssp<span class="sc">::</span><span class="fu">interpolate_spline</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> group_cols,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="st">"year"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"value"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpolate with beers method</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>beers_out <span class="ot">&lt;-</span> agg_iiasa <span class="sc">|&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(model <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"IIASA-WiC POP 2023"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"^Mean Years of Education"</span>, variable)) <span class="sc">|&gt;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  gtapssp<span class="sc">::</span><span class="fu">interpolate_beers</span>(</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> group_cols,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="st">"year"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"value"</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-3-scenario-expansion" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Step 3: Scenario Expansion</h1>
+<p>Expand the dataset to include all scenarios:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the outputs</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(beers_out, spline_out)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Expand scenarios</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>exp_hist <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(scenario <span class="sc">==</span> <span class="st">"Historical Reference"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>scenario) <span class="sc">|&gt;</span>                   </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">scenario =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>scenario))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge expanded scenarios</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(exp_hist, <span class="sc">-</span>value)) <span class="sc">|&gt;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(exp_hist) <span class="sc">|&gt;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(scenario <span class="sc">!=</span> <span class="st">"Historical Reference"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(model, scenario, reg_iso3, variable, unit, year)`</code></pre>
 </div>
 </div>
 </section>
-<section id="labeling-and-cleaning-data-for-export" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="labeling-and-cleaning-data-for-export"><span class="header-section-number">3.2.2</span> Labeling and Cleaning Data for Export</h3>
-<p>In this step, we prepare our WIC data for export by labeling and cleaning it to ensure it’s in the correct format. This involves reading additional data sets and merging them with our main dataset.</p>
+<section id="step-4-final-data-transformation" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Step 4: Final Data Transformation</h1>
+<p>Perform data transformation and formatting:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>isoList_dt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/isoList.csv"</span>, <span class="at">na.strings =</span> <span class="st">""</span>) </span>
-<span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>educDict_dt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/educDict.csv"</span>, <span class="at">na.strings =</span> <span class="st">""</span>)</span>
-<span id="annotated-cell-5-4"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>cohortDict_dt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/cohortDict.csv"</span>, <span class="at">na.strings =</span> <span class="st">""</span>)</span>
-<span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a>genderDict_dt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/genderDict.csv"</span>, <span class="at">na.strings =</span> <span class="st">""</span>)</span>
-<span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-5-7" class="code-annotation-target"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> </span>
-<span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a>  WIC <span class="sc">|&gt;</span> </span>
-<span id="annotated-cell-5-10"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(isoList_dt, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(Region)) <span class="sc">|&gt;</span> </span>
-<span id="annotated-cell-5-11"><a href="#annotated-cell-5-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(educDict_dt, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(education_level)) <span class="sc">|&gt;</span> </span>
-<span id="annotated-cell-5-12"><a href="#annotated-cell-5-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(cohortDict_dt, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(cohort)) <span class="sc">|&gt;</span> </span>
-<span id="annotated-cell-5-13"><a href="#annotated-cell-5-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(genderDict_dt, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(gender_code))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-annotation">
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">Each <code>read.csv</code> call reads a different CSV file containing essential data. The <code>na.strings = ""</code> parameter treats empty strings as <code>NA</code> values.</span>
-</dd>
-<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="7" data-code-annotation="2">The WIC data is joined with the additional datasets using the <code>dplyr::left_join</code>.</span>
-</dd>
-</dl>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create all combinations of groups with required regions</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>unique_groups <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(scenario, reg_iso3, year, value)) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>complete_data <span class="ot">&lt;-</span> unique_groups <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">reg_iso3 =</span> <span class="fu">unique</span>(gtapssp<span class="sc">::</span>corresp_reg<span class="sc">$</span>reg_iso3)) <span class="sc">|&gt;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">year =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>year)) <span class="sc">|&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">scenario =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>scenario))</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure all combinations exist</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> complete_data <span class="sc">|&gt;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(gtap_ssp, <span class="at">by =</span> <span class="fu">c</span>(<span class="fu">names</span>(unique_groups), <span class="st">"scenario"</span>, <span class="st">"reg_iso3"</span>, <span class="st">"year"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">value =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(value, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<p>Finally, <code>dplyr::transmute</code> is used to transform and rename columns, resulting in a dataset ready to be exported:</p>
+<p>Final formatting of the dataset:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>WIC <span class="ot">&lt;-</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  WIC <span class="sc">|&gt;</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">SCE =</span> Scenario,         <span class="co"># SSPs scenarios</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ISO =</span> iso,              <span class="co"># ISO country codes for geographic identification</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDU =</span> educ,             <span class="co"># Education categories, derived from 'educ'</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">GND =</span> gender,           <span class="co"># Gender information</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE =</span> age,              <span class="co"># Age groups or categories</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">YRS =</span> <span class="fu">paste0</span>(<span class="st">"Y"</span>, year),<span class="co"># Year, formatted with a 'Y' prefix</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">POP =</span> value             <span class="co"># Population growth rates</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Format columns</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">VAR =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>      variable <span class="sc">==</span> <span class="st">"GDP|PPP"</span> <span class="sc">~</span> <span class="st">"GDP_PPP"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      variable <span class="sc">==</span> <span class="st">"GDP|PPP [per capita]"</span> <span class="sc">~</span> <span class="st">"GDP_PER_CAPI"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> variable</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> <span class="fu">ifelse</span>(VAR <span class="sc">==</span> <span class="st">"GDP_PPP"</span>, value <span class="sc">*</span> <span class="dv">1000</span>, value)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-</section>
 </section>
 
 </main>
@@ -483,18 +446,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -526,7 +478,47 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -561,7 +553,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -576,38 +572,28 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
     stripColumnClz(note)
-    const typesetMath = (el) => {
-      if (window.MathJax) {
-        // MathJax Typeset
-        window.MathJax.typeset([el]);
-      } else if (window.katex) {
-        // KaTeX Render
-        var mathElements = el.getElementsByClassName("math");
-        var macros = [];
-        for (var i = 0; i < mathElements.length; i++) {
-          var texText = mathElements[i].firstChild;
-          if (mathElements[i].tagName == "SPAN") {
-            window.katex.render(texText.data, mathElements[i], {
-              displayMode: mathElements[i].classList.contains('display'),
-              throwOnError: false,
-              macros: macros,
-              fleqn: false
-            });
-          }
-        }
-      }
-    }
     if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
-        typesetMath(container);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
         return container.innerHTML
       } else {
-        typesetMath(note);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
@@ -616,8 +602,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (anchorLink) {
         anchorLink.remove();
       }
-      typesetMath(note);
-      return note.innerHTML;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
     }
   }
   for (var i=0; i<xrefs.length; i++) {

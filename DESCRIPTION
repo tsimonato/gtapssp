@@ -1,10 +1,10 @@
 Package: gtapssp
-Title: What the Package Does (One Line, Title Case)
+Title: GTAPSSP: Tools for Processing SSPs in the GTAP Framework
 Version: 0.0.0.9000
 Authors@R: 
     person("Thiago", "Simonato", email = "tsimonat@purdue.edu",
            role = c("aut", "cre"), comment = c(ORCID = "0000-0002-0238-7312"))
-Description: What the package does (one paragraph).
+Description: Provides tools for preprocessing, aggregating, interpolating, and expanding Shared Socioeconomic Pathways (SSPs) data for integration with the Global Trade Analysis Project (GTAP) modelling framework.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -14,7 +14,11 @@ Depends:
     R (>= 3.1)
 Imports: 
     stats,
-    data.table,
+    data.table (>= 1.14.8),
     dplyr,
     tidyr,
+    HARr,
     tools
+Remotes:
+    github::USDA-ERS/MTED-HARr    
+    

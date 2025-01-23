@@ -85,16 +85,16 @@ updateCorresp <- function(iiasa_raw = gtapssp::iiasa_raw,
     unique()
   
   # Merge with the existing correspondence table
-  corresp_iiasa <- corresp_reg |> 
+  corresp_reg <- corresp_reg |> 
     dplyr::right_join(iiasa_iso3)
   
   # Save the updated correspondence data if outputFile is provided
   if (!is.null(outputFile)) {
-    save(corresp_iiasa, file = outputFile)
+    save(corresp_reg, file = outputFile)
     message(paste("Data successfully saved to:", outputFile))
     return(invisible(NULL))
   }
   
   # Return the updated correspondence data
-  return(corresp_iiasa)
+  return(corresp_reg)
 }
