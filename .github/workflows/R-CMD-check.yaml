@@ -41,10 +41,10 @@ jobs:
 
       - name: Install HARr and dependencies
         run: |
-          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-          remotes::install_github("USDA-ERS/MTED-HARr", upgrade = "never")
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran(c("pkgbuild", "rcmdcheck", "drat"))
+          Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes')"
+          Rscript -e "remotes::install_github('USDA-ERS/MTED-HARr', upgrade = 'never')"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
+          Rscript -e "remotes::install_cran(c('pkgbuild', 'rcmdcheck', 'drat'))"
 
       - name: Set Library Path
         run: echo ".libPaths('D:/a/_temp/Library')" >> ~/.Rprofile
