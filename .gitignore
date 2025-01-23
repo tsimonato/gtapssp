@@ -55,6 +55,7 @@ docs/data/
 docs/Downloads/
 setup.R
 *.har
+*.bak
 *.xlsx
-data/iiasa_raw.rda
+*.qmd
 data/output.csv
