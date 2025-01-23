@@ -21,10 +21,10 @@
 #' @importFrom stats na.omit
 #' @examples
 #' data <- data.frame(
-#'   Scenario = rep(c("Scenario1", "Scenario2"), each = 5),
-#'   Region = rep(c("Region1", "Region2"), each = 5),
-#'   year = rep(c(2000, 2005, 2010, 2015, 2020), 2),
-#'   value = rnorm(10)
+#'   Scenario = rep(c("Scenario1", "Scenario2"), each = 6),
+#'   Region = rep(c("Region1", "Region2"), each = 6),
+#'   year = rep(c(2000, 2005, 2010, 2015, 2020, 2025), 2),
+#'   value = rnorm(12)
 #' )
 #'
 #' filled_data <- interpolate_beers(
@@ -104,4 +104,3 @@ interpolate_beers <- function(input_df, groups, year, values, method = "ordinary
 
   return(out)
 }
-
