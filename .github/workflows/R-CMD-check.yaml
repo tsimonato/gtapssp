@@ -40,7 +40,12 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      # Explicitly install HARr from GitHub
+      # Install devtools before using it to install HARr
+      - name: Install devtools
+        run: |
+          Rscript -e "install.packages('devtools')"
+
+      # Install HARr from GitHub
       - name: Install HARr from GitHub
         run: |
           Rscript -e "devtools::install_github('USDA-ERS/MTED-HARr')"
