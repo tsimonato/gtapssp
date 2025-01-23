@@ -1,5 +1,4 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
     branches: [main, master]
@@ -40,21 +39,20 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      # Install devtools before using it to install HARr
-      - name: Install devtools
-        run: |
-          Rscript -e "install.packages('devtools')"
-
-      # Install HARr from GitHub
+      # Pre-install HARr package
       - name: Install HARr from GitHub
         run: |
+          Rscript -e "install.packages('devtools')"
           Rscript -e "devtools::install_github('USDA-ERS/MTED-HARr')"
 
+      # Install other dependencies
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
             any::rcmdcheck
+          install-opts: '--no-lock'
 
+      # Run package checks
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
