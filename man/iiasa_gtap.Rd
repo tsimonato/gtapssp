@@ -5,16 +5,11 @@
 \title{Process and Aggregate IIASA Data for GTAP SSP Integration}
 \usage{
 iiasa_gtap(
-  aggTxtFile = NULL,
   outFile = NULL,
-  group_cols = c("model", "scenario", "reg_gtap_code", "variable", "unit")
+  group_cols = c("model", "scenario", "reg_iso3", "variable", "unit")
 )
 }
 \arguments{
-\item{aggTxtFile}{Character. Path to a Gempack-style text file used in GtapAgg2 for additional
-regional mappings. This file specifies the regional aggregation structure and is typically
-formatted as a GEMPACK text file. If \code{NULL}, no additional mapping is applied. Default is \code{NULL}.}
-
 \item{outFile}{Character. Optional path to save the final dataset as a CSV file. If \code{NULL}, the
 file is not saved. Default is \code{NULL}.}
 
@@ -71,21 +66,23 @@ Growth rates are computed as percentage changes between consecutive years within
 specified in \code{group_cols}.
 
 \item \strong{Step 8: Save to File (Optional)}:
-If \code{outFile} is provided, saves the final processed dataset to a CSV file using.
+If \code{outFile} is provided, saves the final processed dataset to a .HAR or .CSV file
 }
 }
 \examples{
 \dontrun{
+# Run the routine and save output to a HAR
+final_data <- gtapssp::iiasa_gtap(
+  outFile = "path/to/output.har"
+)
+
 # Run the routine and save output to a CSV
-final_data <- iiasa_gtap(
-  aggTxtFile = "path/to/aggFile.agg",
+final_data <- gtapssp::iiasa_gtap(
   outFile = "path/to/output.csv"
 )
 
 # Run the routine without saving
-final_data <- iiasa_gtap(
-  aggTxtFile = "path/to/aggFile.agg"
-)
+final_data <- gtapssp::iiasa_gtap()
 }
 
 }

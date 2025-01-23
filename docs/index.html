@@ -9,7 +9,7 @@
 <meta name="author" content="Thiago Simonato">
 <meta name="dcterms.date" content="2025-01-23">
 
-<title>GTAPSSP: Tools for Processing SSPs in the GTAP Framework</title>
+<title>GTAPSSP: SSPs for GTAP Framework</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -75,8 +75,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="index_files/libs/quarto-diagram/mermaid.min.js"></script>
 <script src="index_files/libs/quarto-diagram/mermaid-init.js"></script>
 <link href="index_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<link href="index_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
-
 <script src="index_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 
 <link href="index_files/libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
@@ -95,6 +93,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <script src="index_files/libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 
+<link href="index_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
 
 
 </head>
@@ -107,22 +107,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
-  <ul>
-  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source"><span class="header-section-number">1.1</span> Data Source</a></li>
-  </ul></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
   <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation"><span class="header-section-number">2</span> Installation</a></li>
-  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link" data-scroll-target="#workflow-overview"><span class="header-section-number">3</span> Workflow Overview</a></li>
-  <li><a href="#step-1-preprocessing-and-aggregation" id="toc-step-1-preprocessing-and-aggregation" class="nav-link" data-scroll-target="#step-1-preprocessing-and-aggregation"><span class="header-section-number">4</span> Step 1: Preprocessing and Aggregation</a></li>
-  <li><a href="#step-2-expanding-data" id="toc-step-2-expanding-data" class="nav-link" data-scroll-target="#step-2-expanding-data"><span class="header-section-number">5</span> Step 2: Expanding data</a></li>
-  <li><a href="#step-4-joining-labels" id="toc-step-4-joining-labels" class="nav-link" data-scroll-target="#step-4-joining-labels"><span class="header-section-number">6</span> Step 4: Joining labels</a></li>
-  <li><a href="#step-5-cleaning-labels" id="toc-step-5-cleaning-labels" class="nav-link" data-scroll-target="#step-5-cleaning-labels"><span class="header-section-number">7</span> Step 5: Cleaning labels</a></li>
-  <li><a href="#step-6-preparing-final-output-data-for-export" id="toc-step-6-preparing-final-output-data-for-export" class="nav-link" data-scroll-target="#step-6-preparing-final-output-data-for-export"><span class="header-section-number">8</span> Step 6: Preparing Final Output Data for Export</a>
+  <li><a href="#quick-start-run-the-entire-pipeline" id="toc-quick-start-run-the-entire-pipeline" class="nav-link" data-scroll-target="#quick-start-run-the-entire-pipeline"><span class="header-section-number">3</span> Quick Start: Run the Entire Pipeline</a></li>
+  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link" data-scroll-target="#workflow-overview"><span class="header-section-number">4</span> Workflow Overview</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source"><span class="header-section-number">5</span> Data Source</a></li>
+  <li><a href="#step-1-preprocessing-and-aggregation" id="toc-step-1-preprocessing-and-aggregation" class="nav-link" data-scroll-target="#step-1-preprocessing-and-aggregation"><span class="header-section-number">6</span> Step 1: Preprocessing and Aggregation</a></li>
+  <li><a href="#step-2-expanding-data" id="toc-step-2-expanding-data" class="nav-link" data-scroll-target="#step-2-expanding-data"><span class="header-section-number">7</span> Step 2: Expanding data</a></li>
+  <li><a href="#step-3-joining-labels" id="toc-step-3-joining-labels" class="nav-link" data-scroll-target="#step-3-joining-labels"><span class="header-section-number">8</span> Step 3: Joining labels</a></li>
+  <li><a href="#step-4-cleaning-labels" id="toc-step-4-cleaning-labels" class="nav-link" data-scroll-target="#step-4-cleaning-labels"><span class="header-section-number">9</span> Step 4: Cleaning labels</a></li>
+  <li><a href="#step-5-preparing-final-output-data-for-export" id="toc-step-5-preparing-final-output-data-for-export" class="nav-link" data-scroll-target="#step-5-preparing-final-output-data-for-export"><span class="header-section-number">10</span> Step 5: Preparing Final Output Data for Export</a>
   <ul>
-  <li><a href="#convert-to-arrays-and-add-descriptions" id="toc-convert-to-arrays-and-add-descriptions" class="nav-link" data-scroll-target="#convert-to-arrays-and-add-descriptions"><span class="header-section-number">8.0.1</span> Convert to Arrays and Add Descriptions</a></li>
-  <li><a href="#export-to-.har-file" id="toc-export-to-.har-file" class="nav-link" data-scroll-target="#export-to-.har-file"><span class="header-section-number">8.1</span> Export to .har File</a></li>
+  <li><a href="#convert-to-arrays-and-add-descriptions" id="toc-convert-to-arrays-and-add-descriptions" class="nav-link" data-scroll-target="#convert-to-arrays-and-add-descriptions"><span class="header-section-number">10.0.1</span> Convert to Arrays and Add Descriptions</a></li>
+  <li><a href="#export-to-.har-file" id="toc-export-to-.har-file" class="nav-link" data-scroll-target="#export-to-.har-file"><span class="header-section-number">10.1</span> Export to .har File</a></li>
   </ul></li>
-  <li><a href="#optional-step-download-and-update-input-data" id="toc-optional-step-download-and-update-input-data" class="nav-link" data-scroll-target="#optional-step-download-and-update-input-data"><span class="header-section-number">9</span> Optional Step: Download and Update input data</a></li>
+  <li><a href="#optional-step-download-and-update-input-data" id="toc-optional-step-download-and-update-input-data" class="nav-link" data-scroll-target="#optional-step-download-and-update-input-data"><span class="header-section-number">11</span> Optional Step: Download and Update input data</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
 </div>
@@ -130,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">GTAPSSP: Tools for Processing SSPs in the GTAP Framework</h1>
+<h1 class="title">GTAPSSP: SSPs for GTAP Framework</h1>
 </div>
 
 
@@ -163,50 +162,94 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>This tutorial demonstrates the utilization of the <code>gtapssp</code> package in R for data processing. It covers various steps such as reading, transforming, and analyzing data, making it suitable for both beginners and advanced users.</p>
 <p>The package provides optimized and user-friendly functions to <strong>download</strong> SSP data, <strong>interpolate</strong> data using <strong>spline</strong> and <strong>beers</strong> methods. The <em>gtapssp</em> functions is accompanied by detailed <a href="https://github.com/tsimonato/gtapssp/raw/master/docs/gtapssp_0.0.0.9000.pdf">manual</a>, you can also access this manual by running <code>?gtapssp</code> in the R console or pressing <code>F1</code> on the function name in <a href="https://posit.co/download/rstudio-desktop/">RStudio</a>.</p>
-<section id="data-source" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="data-source"><span class="header-section-number">1.1</span> Data Source</h2>
-<p>The pipeline uses projections from the Shared Socioeconomic Pathways (SSPs) developed by IIASA (version 3.0.1, March 2024). These projections include <strong>GDP</strong> and <strong>population</strong> data and are publicly available under a license allowing reuse by other research communities. For more details, visit the official <a href="https://data.ece.iiasa.ac.at/ssp">IIASA SSP database</a>.</p>
-<p>Below is a preview of the default IIASA dataset used in the <code>gtapssp</code> package. This dataset can be updated with the <code>gtapssp::updateData</code> function if newer data or custom updates are required.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>iiasa_raw<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-d01d1237278e2e4656d7" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-d01d1237278e2e4656d7">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40"],["IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023"],["SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2"],["Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Algeria","Algeria","Algeria","Algeria","Algeria","Algeria","Algeria","Algeria"],["GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP"],["billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr"],[2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100,2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100,2025,2030,2035,2040,2045,2050,2055,2060],[7739.894416053859,8869.621612801477,11028.55398825598,13678.58485495506,16798.78489408052,20480.93617311901,24750.77319241611,29601.26627853272,34961.02986906521,40836.50164663944,47210.69116722118,54049.06693293052,61300.85896340867,69013.09721230762,77103.25476849801,85418.0584444174,47.4110750626342,46.5894540308125,49.1483693108402,51.8829480017842,55.924528740445,58.5911228080069,60.387957790712,62.1100242255907,64.2936258923292,67.7459448746831,70.8989984766984,73.6318616634122,75.8262587903485,77.7868362985075,79.456547595678,81.28941468402719,530.710596835812,683.15619318748,866.124116502674,1086.47050851857,1337.36071150099,1614.68484234239,1898.52373470229,2190.86014671831]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>model<\/th>\n      <th>scenario<\/th>\n      <th>region<\/th>\n      <th>variable<\/th>\n      <th>unit<\/th>\n      <th>year<\/th>\n      <th>value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[6,7]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"model","targets":1},{"name":"scenario","targets":2},{"name":"region","targets":3},{"name":"variable","targets":4},{"name":"unit","targets":5},{"name":"year","targets":6},{"name":"value","targets":7}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-</section>
 </section>
 <section id="installation" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Installation</h1>
 <p>To use the <em>gtapssp</em> package, it’s necessary to have <em>R</em> installed on your computer, which can be downloaded from <a href="https://www.r-project.org/">here</a>. Additionally, we recommend downloading <em>RStudio</em>, available at <a href="https://posit.co/download/rstudio-desktop/">here</a>, which provides a user-friendly interface to work with <em>R</em>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R install details
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>R is a versatile programming language, with a focus on statistical computing. It is a big part of academic research in the social sciences. R is free and open-source and runs on Windows, Mac OS X, and Linux.</p>
+<ol type="1">
+<li>Download the R installer from the Comprehensive R Archive Network (CRAN)</li>
+</ol>
+<ul>
+<li>Choose the appropriate installer for your operating system and computer architecture (32-bit or 64-bit).</li>
+<li>If on Mac, you will need to know if you are using an Intel or Apple Silicon (M1) processor.</li>
+</ul>
+<ol start="2" type="1">
+<li><p>Run the installer and follow the instructions.</p></li>
+<li><p>We recommend install <strong>R Tools</strong>. Many of the packages we will be using in this course require R Tools to be installed.</p>
+<p>If you are on Windows:</p></li>
+</ol>
+<ul>
+<li><p>Download the latest version of the software from the <a href="https://cran.r-project.org/bin/windows/Rtools/">R Tools for Windows</a> page.</p></li>
+<li><p>Run the installer and follow the instructions.</p>
+<p>If you are on Mac:</p></li>
+<li><p>First, install the Xcode Command Line Tools. Go to the <a href="https://mac.r-project.org/tools/">R Tools for Mac</a> page and follow the instructions. Note: the precise instructions will vary according to the version of macOS you are using.</p></li>
+<li><p>Install the gfortran compiler, as also indicated on the <a href="https://mac.r-project.org/tools/">R Tools for Mac</a> page.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+IDE install details
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We recommend RStudio as IDE for R.</p>
+<p><a href="https://posit.co/download/rstudio-desktop/">RStudio</a> is by far the most popular IDE used by R programmers. It is free and open-source and comes with a console and syntax-highlighting editor that supports direct code execution, as well as tools for plotting, history, debugging, and workspace management.</p>
+<p><strong>Alternative</strong>: If you are already familiar with <a href="https://code.visualstudio.com/">Visual Studio Code (VS Code)</a>, say because you have already used it for Python, you can also use it for R programming. You will need to do a bit of configuration to get it to work, though. If you choose to use VS Code, download and install the <a href="https://marketplace.visualstudio.com/items?itemName=Ikuyadeu.r">R Extension for Visual Studio Code</a> and remember to follow the instructions on the <em>Getting Started</em> section of the extension page.</p>
+</div>
+</div>
+</div>
 <p>You can install the development version of <em>gtapssp</em> from <a href="https://github.com/tsimonato/gtapssp">GitHub</a> with:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If the devtools package is not already installed, please run the disabled line below.</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("devtools")</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"tsimonato/gtapssp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If the devtools package is not already installed, please run the disabled line below.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("devtools")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"tsimonato/gtapssp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="workflow-overview" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Workflow Overview</h1>
+<section id="quick-start-run-the-entire-pipeline" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Quick Start: Run the Entire Pipeline</h1>
+<p>If you’d like to execute the entire pipeline described in this tutorial with minimal effort, you can use the <code>gtapssp::iiasa_gtap()</code> function. This function runs all steps, including data aggregation, interpolation, expansion, label merging, and optional file exports.</p>
+<p>Here’s an example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the entire pipeline and save the output as a .HAR file</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span><span class="fu">iiasa_gtap</span>(<span class="at">outFile =</span> <span class="st">"gtap_ssp.har"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Or save as a .CSV file</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span><span class="fu">iiasa_gtap</span>(<span class="at">outFile =</span> <span class="st">"gtap_ssp.csv"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># To simply process the data without saving it</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>final_data <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">iiasa_gtap</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This function provides flexibility to either save the output in .har or .csv formats or return the processed dataset for further use in R.</p>
+</section>
+<section id="workflow-overview" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Workflow Overview</h1>
 <p>The pipeline involves the following steps:</p>
-<ol type="1">
-<li><strong>Updating the Data</strong>: Fetch and update raw datasets.</li>
-<li><strong>Preprocessing and Aggregation</strong>: Interpolate and clean data.</li>
-<li><strong>Scenario Expansion</strong>: Expand datasets to include all scenarios.</li>
-<li><strong>Final Data Transformation</strong>: Combine, transform, and format datasets.</li>
-</ol>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Workflow pipeline</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Optional Steps</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="cell" data-layout-align="default">
+<div class="cell" data-fig-width="8" data-fig-height="6" data-layout-align="default">
 <div class="cell-output-display">
+<div id="workflow-pipeline">
 <div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph TD
+<pre class="mermaid mermaid-js" data-label="workflow-pipeline">graph TD
 
 subgraph s1["Step 1"]
     R4[IIASA raw data] --&gt; D[Summarise Data]
@@ -232,336 +275,344 @@ subgraph s1["Step 1"]
 
 </pre>
 </div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph TD
-
-subgraph sO["Optional Steps"]
-    A[IIASA data API] --&gt; B([Update Data: gtapssp::updateData])
-    B --&gt; R[IIASA raw data]
-    R2[IIASA raw data] --&gt;  C([Create Regional Mappings: gtapssp::updateCorresp])
-    R7[Custom regional correspondences] --&gt;  C
-    C --&gt; R3[Regional correspondences]
-end
-
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>
 </section>
-<section id="step-1-preprocessing-and-aggregation" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Step 1: Preprocessing and Aggregation</h1>
+<section id="data-source" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Data Source</h1>
+<p>The pipeline uses projections from the Shared Socioeconomic Pathways (SSPs) developed by IIASA (version 3.0.1, March 2024). These projections include <strong>GDP</strong> and <strong>Population</strong> data and are publicly available under a license allowing reuse by other research communities. For more details, visit the official <a href="https://data.ece.iiasa.ac.at/ssp">IIASA SSP database</a>.</p>
+<p>Below is a preview of the default IIASA dataset used in the <code>gtapssp</code> package. This dataset can be updated with the <code>gtapssp::updateData</code> function if newer data or custom updates are required.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>iiasa_raw<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="htmlwidget-37862f14bf86ed76f7b1" style="width:100%;height:250px;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-37862f14bf86ed76f7b1">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40"],["IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023","IIASA GDP 2023"],["SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2","SSP2"],["Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Africa (R10)","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Albania","Algeria","Algeria","Algeria","Algeria","Algeria","Algeria","Algeria","Algeria"],["GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP","GDP|PPP"],["billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr","billion USD_2017/yr"],[2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100,2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100,2025,2030,2035,2040,2045,2050,2055,2060],[7739.894416053859,8869.621612801477,11028.55398825598,13678.58485495506,16798.78489408052,20480.93617311901,24750.77319241611,29601.26627853272,34961.02986906521,40836.50164663944,47210.69116722118,54049.06693293052,61300.85896340867,69013.09721230762,77103.25476849801,85418.0584444174,47.4110750626342,46.5894540308125,49.1483693108402,51.8829480017842,55.924528740445,58.5911228080069,60.387957790712,62.1100242255907,64.2936258923292,67.7459448746831,70.8989984766984,73.6318616634122,75.8262587903485,77.7868362985075,79.456547595678,81.28941468402719,530.710596835812,683.15619318748,866.124116502674,1086.47050851857,1337.36071150099,1614.68484234239,1898.52373470229,2190.86014671831]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>model<\/th>\n      <th>scenario<\/th>\n      <th>region<\/th>\n      <th>variable<\/th>\n      <th>unit<\/th>\n      <th>year<\/th>\n      <th>value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"scrollY":"250px","scrollCollapse":true,"columnDefs":[{"className":"dt-right","targets":[6,7]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"model","targets":1},{"name":"scenario","targets":2},{"name":"region","targets":3},{"name":"variable","targets":4},{"name":"unit","targets":5},{"name":"year","targets":6},{"name":"value","targets":7}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="step-1-preprocessing-and-aggregation" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Step 1: Preprocessing and Aggregation</h1>
 <p>Aggregate the raw data using <code>gtapssp::aggData</code>. This function groups the dataset by specified columns and sums the values within each group, ensuring compatibility with the GTAP regional structure.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define grouping columns</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>group_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"model"</span>, <span class="st">"scenario"</span>, <span class="st">"reg_iso3"</span>, <span class="st">"variable"</span>, <span class="st">"unit"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate raw data</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>agg_iiasa <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">aggData</span>(<span class="at">group_cols =</span> group_cols)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>aggData</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define grouping columns</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>group_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"model"</span>, <span class="st">"scenario"</span>, <span class="st">"reg_iso3"</span>, <span class="st">"variable"</span>, <span class="st">"unit"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate raw data</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>agg_iiasa <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">aggData</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">iiasa_raw =</span> gtapssp<span class="sc">::</span>iiasa_raw,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_cols =</span> group_cols</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>aggData</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Missing values in the dataset are interpolated using two methods:</p>
-<p><strong>Spline Interpolation</strong>: Smoothly fills gaps for GDP and related variables using cubic splines. By default, the function uses the <code>"fmm"</code> method (default) for interpolation. Users can modify interpolation parameters for custom behavior. Check the function documentation for details.</p>
+<p><strong><code>Spline</code> Interpolation</strong>: Smoothly fills gaps for GDP and related variables using cubic splines. By default, the function uses the <code>"fmm"</code> method (default) for interpolation. Users can modify interpolation parameters for custom behavior. Check the function documentation for details.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpolate with spline method</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>spline_out <span class="ot">&lt;-</span> agg_iiasa <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>(model) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(model <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"IIASA GDP 2023"</span>, <span class="st">"OECD ENV-Growth 2023"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  gtapssp<span class="sc">::</span><span class="fu">interpolate_spline</span>(</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> group_cols,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="st">"year"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"value"</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>interpolate_spline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>Beers Interpolation</strong>: Specially designed for demographic data, This function applies the Beers interpolation algorithm, which is particularly suited for age-cohort data. The default <code>"ordinary"</code> approach preserves population totals while distributing values evenly across age groups. Additional parameters can be adjusted as needed; refer to the function documentation for more information.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpolate with beers method</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>beers_out <span class="ot">&lt;-</span> agg_iiasa <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(model <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"IIASA-WiC POP 2023"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"^Mean Years of Education"</span>, variable)) <span class="sc">|&gt;</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  gtapssp<span class="sc">::</span><span class="fu">interpolate_beers</span>(</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpolate with spline method</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>spline_out <span class="ot">&lt;-</span> agg_iiasa <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>(model) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(model <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"IIASA GDP 2023"</span>, <span class="st">"OECD ENV-Growth 2023"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  gtapssp<span class="sc">::</span><span class="fu">interpolate_spline</span>(</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> group_cols,</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="st">"year"</span>,</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"value"</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the "variable" column into multiple columns using the delimiter "|".</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># This transformation helps to break down the information in "variable" into separate components.</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># The new columns will be: "variable", "gender_code", "cohort", and "education_level".</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>beers_out <span class="ot">&lt;-</span> beers_out <span class="sc">|&gt;</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_delim</span>(</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="st">"variable"</span>, <span class="co"># &lt;1&gt; Specify the column to be split.</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"gender_code"</span>, <span class="st">"cohort"</span>, <span class="st">"education_level"</span>), <span class="co"># &lt;2&gt; Define the new column names.</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">delim =</span> <span class="st">"|"</span>, <span class="co"># &lt;3&gt; Use "|" as the delimiter to separate values in the "variable" column.</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">too_few =</span> <span class="st">"align_start"</span> <span class="co"># &lt;4&gt; Align the resulting values from the split to the start of the new columns if there are fewer parts than columns.</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>interpolate_beers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>interpolate_spline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The outputs from the <strong>Beers Interpolation</strong> (Population data) and <strong>Spline Interpolation</strong> (GDP data) are concatenated vertically into a single dataset.</p>
+<p><strong><code>Beers</code> Interpolation</strong>: Specially designed for demographic data, This function applies the Beers interpolation algorithm, which is particularly suited for age-cohort data. The default <code>"ordinary"</code> method preserves population totals while distributing values evenly across age groups. Additional parameters can be adjusted as needed; refer to the function documentation for more information.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the outputs of GDP and Population data</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(beers_out, spline_out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpolate with beers method</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>beers_out <span class="ot">&lt;-</span> agg_iiasa <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(model <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"IIASA-WiC POP 2023"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"^Mean Years of Education"</span>, variable)) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  gtapssp<span class="sc">::</span><span class="fu">interpolate_beers</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> group_cols,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="st">"year"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"value"</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the "variable" column into multiple columns using the delimiter "|".</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># This transformation helps to break down the information in "variable" into separate components.</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># The new columns will be: "variable", "gender_code", "cohort", and "education_level".</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>beers_out <span class="ot">&lt;-</span> beers_out <span class="sc">|&gt;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_delim</span>(</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="st">"variable"</span>, <span class="co"># &lt;1&gt; Specify the column to be split.</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"gender_code"</span>, <span class="st">"cohort"</span>, <span class="st">"education_level"</span>), <span class="co"># &lt;2&gt; Define the new column names.</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">delim =</span> <span class="st">"|"</span>, <span class="co"># &lt;3&gt; Use "|" as the delimiter to separate values in the "variable" column.</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">too_few =</span> <span class="st">"align_start"</span> <span class="co"># &lt;4&gt; Align the resulting values from the split to the start of the new columns if there are fewer parts than columns.</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>interpolate_beers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The outputs from the Beers Interpolation (Population data) and Spline Interpolation (GDP data) are concatenated vertically into a single dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the outputs of GDP and Population data</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(beers_out, spline_out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="step-2-expanding-data" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Step 2: Expanding data</h1>
+<section id="step-2-expanding-data" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Step 2: Expanding data</h1>
 <p>The “Historical Reference” labels in the <code>scenario</code> dimension are renamed to match the SSP categories (e.g., SSP1, SSP2, …, SSP5). This step ensures that the elements in the <code>scenario</code> dimension are aligned, enabling the creation of a continuous time series by scenario.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Expand scenarios</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>exp_hist <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(scenario <span class="sc">==</span> <span class="st">"Historical Reference"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>scenario) <span class="sc">|&gt;</span>                   </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">scenario =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>scenario))</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge expanded scenarios</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(exp_hist, <span class="sc">-</span>value)) <span class="sc">|&gt;</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(exp_hist) <span class="sc">|&gt;</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(scenario <span class="sc">!=</span> <span class="st">"Historical Reference"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Expand scenarios</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>exp_hist <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(scenario <span class="sc">==</span> <span class="st">"Historical Reference"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>scenario) <span class="sc">|&gt;</span>                   </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">scenario =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>scenario))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge expanded scenarios</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(exp_hist, <span class="sc">-</span>value)) <span class="sc">|&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(exp_hist) <span class="sc">|&gt;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(scenario <span class="sc">!=</span> <span class="st">"Historical Reference"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To ensure completeness to be able to export to a ’.har” file, expand the dataset to include all combinations of scenarios, regions, and years.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract unique combinations of columns excluding 'scenario', 'reg_iso3', 'year', and 'value'.</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># These columns are assumed to represent unique group identifiers for the dataset.</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>unique_groups <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(scenario, reg_iso3, year, value)) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>()  <span class="co"># Retain only distinct rows to define unique group combinations.</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Expand the dataset to include all possible combinations of unique groups with regions, years, and scenarios.</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>complete_data <span class="ot">&lt;-</span> unique_groups <span class="sc">|&gt;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">reg_iso3 =</span> <span class="fu">unique</span>(gtapssp<span class="sc">::</span>corresp_reg<span class="sc">$</span>reg_iso3)) <span class="sc">|&gt;</span> <span class="co"># Add all unique region ISO codes.</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">year =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>year)) <span class="sc">|&gt;</span><span class="co"># Add all unique years in the dataset.</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">scenario =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>scenario))<span class="co"># Add all unique SSP scenarios.</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure that all combinations of groups, regions, years, and scenarios exist in the final dataset.</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Any missing combinations will be filled with default values.</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> complete_data <span class="sc">|&gt;</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    gtap_ssp, </span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="fu">names</span>(unique_groups), <span class="st">"scenario"</span>, <span class="st">"reg_iso3"</span>, <span class="st">"year"</span>)  <span class="co"># Merge by all relevant keys.</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">value =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(value, <span class="dv">0</span>))  <span class="co"># Replace any missing values in the 'value' column with 0.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract unique combinations of columns excluding 'scenario', 'reg_iso3', 'year', and 'value'.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># These columns are assumed to represent unique group identifiers for the dataset.</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>unique_groups <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(scenario, reg_iso3, year, value)) <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>()  <span class="co"># Retain only distinct rows to define unique group combinations.</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Expand the dataset to include all possible combinations of unique groups with regions, years, and scenarios.</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>complete_data <span class="ot">&lt;-</span> unique_groups <span class="sc">|&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">reg_iso3 =</span> <span class="fu">unique</span>(gtapssp<span class="sc">::</span>corresp_reg<span class="sc">$</span>reg_iso3)) <span class="sc">|&gt;</span> <span class="co"># Add all unique region ISO codes.</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">year =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>year)) <span class="sc">|&gt;</span><span class="co"># Add all unique years in the dataset.</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">scenario =</span> <span class="fu">unique</span>(gtap_ssp<span class="sc">$</span>scenario))<span class="co"># Add all unique SSP scenarios.</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure that all combinations of groups, regions, years, and scenarios exist in the final dataset.</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Any missing combinations will be filled with default values.</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> complete_data <span class="sc">|&gt;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    gtap_ssp, </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="fu">names</span>(unique_groups), <span class="st">"scenario"</span>, <span class="st">"reg_iso3"</span>, <span class="st">"year"</span>)  <span class="co"># Merge by all relevant keys.</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">value =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(value, <span class="dv">0</span>))  <span class="co"># Replace any missing values in the 'value' column with 0.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="step-4-joining-labels" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Step 4: Joining labels</h1>
+<section id="step-3-joining-labels" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Step 3: Joining labels</h1>
 <p>This step integrates additional labels by merging auxiliary datasets with the main dataset. It uses ISO codes, educational levels, cohort categories, and gender information. The default label correspondences included in the package are shown below. They can be modified with external sources if needed.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Educational Level</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Cohort Categories</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Gender Labels</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Educational Level</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Cohort Categories</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Gender Labels</a></li></ul>
 <div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>educDict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-8d8b86a62bdd98dbc1e7" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-8d8b86a62bdd98dbc1e7">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7"],["No Education","Incomplete Primary Education","Primary Education","Lower Secondary Education","Upper Secondary Education","Post Secondary Education",null],["NONE","PRMX","PRIM","SECL","SECU","TERT","NONE"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>education_level<\/th>\n      <th>educ<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"education_level","targets":1},{"name":"educ","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>cohortDict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>educDict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-c76913ac1ce7e7bc7372" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-c76913ac1ce7e7bc7372">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21"],["Age 0-4","Age 5-9","Age 10-14","Age 15-19","Age 20-24","Age 25-29","Age 30-34","Age 35-39","Age 40-44","Age 45-49","Age 50-54","Age 55-59","Age 60-64","Age 65-69","Age 70-74","Age 75-79","Age 80-84","Age 85-89","Age 90-94","Age 95-99","Age 100+"],["PLT14","PLT14","PLT14","P1564","P1564","P1564","P1564","P1564","P1564","P1564","P1564","P1564","P1564","P65UP","P65UP","P65UP","P65UP","P65UP","P65UP","P65UP","P65UP"],["P0004","P0509","P1014","P1519","P2024","P2529","P3034","P3539","P4044","P4549","P5054","P5559","P6064","P6569","P7074","P7579","P8084","P8589","P9094","P9599","P100P"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>cohort<\/th>\n      <th>age<\/th>\n      <th>age_disagg<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"cohort","targets":1},{"name":"age","targets":2},{"name":"age_disagg","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-b7c0a1c7a0c0b73aacd6" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-b7c0a1c7a0c0b73aacd6">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7"],["No Education","Incomplete Primary Education","Primary Education","Lower Secondary Education","Upper Secondary Education","Post Secondary Education",null],["NONE","PRMX","PRIM","SECL","SECU","TERT","NONE"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>education_level<\/th>\n      <th>educ<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"education_level","targets":1},{"name":"educ","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
-<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>genderDict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>cohortDict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-a11ce8221ceaa13a153c" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-a11ce8221ceaa13a153c">{"x":{"filter":"none","vertical":false,"data":[["1","2"],["Male","Female"],["MALE","FEML"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>gender_code<\/th>\n      <th>gender<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"gender_code","targets":1},{"name":"gender","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-9b7020abe4c9f0806a2b" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-9b7020abe4c9f0806a2b">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21"],["Age 0-4","Age 5-9","Age 10-14","Age 15-19","Age 20-24","Age 25-29","Age 30-34","Age 35-39","Age 40-44","Age 45-49","Age 50-54","Age 55-59","Age 60-64","Age 65-69","Age 70-74","Age 75-79","Age 80-84","Age 85-89","Age 90-94","Age 95-99","Age 100+"],["PLT14","PLT14","PLT14","P1564","P1564","P1564","P1564","P1564","P1564","P1564","P1564","P1564","P1564","P65UP","P65UP","P65UP","P65UP","P65UP","P65UP","P65UP","P65UP"],["P0004","P0509","P1014","P1519","P2024","P2529","P3034","P3539","P4044","P4549","P5054","P5559","P6064","P6569","P7074","P7579","P8084","P8589","P9094","P9599","P100P"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>cohort<\/th>\n      <th>age<\/th>\n      <th>age_disagg<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"cohort","targets":1},{"name":"age","targets":2},{"name":"age_disagg","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>genderDict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-a0872461d49828fd5681" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-a0872461d49828fd5681">{"x":{"filter":"none","vertical":false,"data":[["1","2"],["Male","Female"],["MALE","FEML"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>gender_code<\/th>\n      <th>gender<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"gender_code","targets":1},{"name":"gender","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the auxiliary datasets with the main dataset (gtap_ssp)</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Integrate educational level labels</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(gtapssp<span class="sc">::</span>educDict, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(education_level)) <span class="sc">|&gt;</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Integrate cohort labels</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(gtapssp<span class="sc">::</span>cohortDict, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(cohort)) <span class="sc">|&gt;</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Integrate gender labels</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(gtapssp<span class="sc">::</span>genderDict, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(gender_code))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the auxiliary datasets with the main dataset (gtap_ssp)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Integrate educational level labels</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(gtapssp<span class="sc">::</span>educDict, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(education_level)) <span class="sc">|&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Integrate cohort labels</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(gtapssp<span class="sc">::</span>cohortDict, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(cohort)) <span class="sc">|&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Integrate gender labels</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(gtapssp<span class="sc">::</span>genderDict, <span class="at">by =</span> dplyr<span class="sc">::</span><span class="fu">join_by</span>(gender_code))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="step-5-cleaning-labels" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Step 5: Cleaning labels</h1>
+<section id="step-4-cleaning-labels" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Step 4: Cleaning labels</h1>
 <p>In this step, the dataset is refined to improve consistency and clarity. Column names are renamed to standardized 3 characters labels. Missing values in gender and age are replaced with “TOTL” (representing Total). The variable column for GDP is reclassified, such as converting “GDP|PPP” to “GDP_PPP.” Additionally, the values for GDP (PPP) are adjusted by scaling them by 1000 to reflect the correct units.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">MOD =</span> model,                  <span class="co"># Rename 'model' to 'MOD'</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">VAR =</span> variable,               <span class="co"># Rename 'variable' to 'VAR'</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">SCE =</span> scenario,               <span class="co"># Rename 'scenario' to 'SCE'</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">ISO =</span> reg_iso3,               <span class="co"># Rename 'reg_iso3' to 'ISO'</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">GND =</span> gender,                 <span class="co"># Rename 'gender' to 'GND'</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE =</span> age,                    <span class="co"># Rename 'age' to 'AGE'</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">YRS =</span> <span class="fu">paste0</span>(<span class="st">"Y"</span>, year),      <span class="co"># Add "Y" prefix to 'year'</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">POP =</span> value,                  <span class="co"># Rename 'value' to 'POP'</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.keep =</span> <span class="st">"none"</span>                <span class="co"># Keep only the newly defined variables</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> </span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">GND =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(GND, <span class="st">"TOTL"</span>), <span class="co"># Replace NA in gender with "TOTL" (Total)</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(AGE, <span class="st">"TOTL"</span>) <span class="co"># Replace NA in age with "TOTL" (Total)</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Modify and transform existing variables using dplyr::mutate</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reclassify the values of the 'variable' column into a new variable 'VAR'</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">VAR =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>      VAR <span class="sc">==</span> <span class="st">"GDP|PPP"</span> <span class="sc">~</span> <span class="st">"GDP_PPP"</span>,                <span class="co"># Replace "GDP|PPP" with "GDP_PPP"</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>      VAR <span class="sc">==</span> <span class="st">"GDP|PPP [per capita]"</span> <span class="sc">~</span> <span class="st">"GDP_PER_CAPI"</span>,  <span class="co"># Replace "GDP|PPP [per capita]" with "GDP_PER_CAPI"</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> VAR                                    <span class="co"># Retain the original values for all other cases</span></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Adjust the values in the 'value' column for GDP_PPP by multiplying by 1000</span></span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">POP =</span> <span class="fu">ifelse</span>(</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>      VAR <span class="sc">==</span> <span class="st">"GDP_PPP"</span>,    <span class="co"># Check if the 'VAR' column equals "GDP_PPP"</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>      POP <span class="sc">*</span> <span class="dv">1000</span>,        <span class="co"># Multiply the value by 1000 to adjust the unit for absolute values</span></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>      POP                <span class="co"># Keep the value unchanged for other cases</span></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">MOD =</span> model,                  <span class="co"># Rename 'model' to 'MOD'</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">VAR =</span> variable,               <span class="co"># Rename 'variable' to 'VAR'</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">SCE =</span> scenario,               <span class="co"># Rename 'scenario' to 'SCE'</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">ISO =</span> reg_iso3,               <span class="co"># Rename 'reg_iso3' to 'ISO'</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">GND =</span> gender,                 <span class="co"># Rename 'gender' to 'GND'</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE =</span> age,                    <span class="co"># Rename 'age' to 'AGE'</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">YRS =</span> <span class="fu">paste0</span>(<span class="st">"Y"</span>, year),      <span class="co"># Add "Y" prefix to 'year'</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">POP =</span> value,                  <span class="co"># Rename 'value' to 'POP'</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.keep =</span> <span class="st">"none"</span>                <span class="co"># Keep only the newly defined variables</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">GND =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(GND, <span class="st">"TOTL"</span>), <span class="co"># Replace NA in gender with "TOTL" (Total)</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(AGE, <span class="st">"TOTL"</span>) <span class="co"># Replace NA in age with "TOTL" (Total)</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>gtap_ssp <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Modify and transform existing variables using dplyr::mutate</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reclassify the values of the 'variable' column into a new variable 'VAR'</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">VAR =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>      VAR <span class="sc">==</span> <span class="st">"GDP|PPP"</span> <span class="sc">~</span> <span class="st">"GDP_PPP"</span>,                <span class="co"># Replace "GDP|PPP" with "GDP_PPP"</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>      VAR <span class="sc">==</span> <span class="st">"GDP|PPP [per capita]"</span> <span class="sc">~</span> <span class="st">"GDP_PER_CAPI"</span>,  <span class="co"># Replace "GDP|PPP [per capita]" with "GDP_PER_CAPI"</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> VAR                                    <span class="co"># Retain the original values for all other cases</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Adjust the values in the 'value' column for GDP_PPP by multiplying by 1000</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">POP =</span> <span class="fu">ifelse</span>(</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>      VAR <span class="sc">==</span> <span class="st">"GDP_PPP"</span>,    <span class="co"># Check if the 'VAR' column equals "GDP_PPP"</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>      POP <span class="sc">*</span> <span class="dv">1000</span>,        <span class="co"># Multiply the value by 1000 to adjust the unit for absolute values</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>      POP                <span class="co"># Keep the value unchanged for other cases</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="step-6-preparing-final-output-data-for-export" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Step 6: Preparing Final Output Data for Export</h1>
+<section id="step-5-preparing-final-output-data-for-export" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Step 5: Preparing Final Output Data for Export</h1>
 <p>In this step, data is processed into three separate components: population (<code>POP</code>), GDP projections (<code>GDPI</code>), and GDP from the OECD ENV-Growth dataset (<code>GDPO</code>). These datasets are then formatted as arrays and saved to a <code>.har</code> file for further use in GTAP modeling.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare population (POP) dataset</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>POP <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(MOD <span class="sc">==</span> <span class="st">"IIASA-WiC POP 2023"</span>) <span class="sc">|&gt;</span>               <span class="co"># Select population model</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(GND <span class="sc">!=</span> <span class="st">"TOTL"</span>) <span class="sc">|&gt;</span>                             <span class="co"># Exclude total gender records</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(SCE, ISO, GND, YRS, AGE) <span class="sc">|&gt;</span>                <span class="co"># Group by scenario, ISO, gender, year, and age</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">POP =</span> <span class="fu">sum</span>(POP, <span class="at">na.rm =</span> T))                 <span class="co"># Sum population values, handling missing data</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare GDP projections (GDPI)</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>GDPI <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span> </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">complete</span>(MOD, VAR, SCE, ISO, YRS, <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">POP =</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span> <span class="co"># Ensure all combinations exist with default values</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(MOD <span class="sc">==</span> <span class="st">"IIASA GDP 2023"</span>) <span class="sc">|&gt;</span>                         <span class="co"># Select IIASA GDP projections model</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(VAR <span class="sc">!=</span> <span class="st">"Population"</span>) <span class="sc">|&gt;</span>                             <span class="co"># Exclude population variables</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(VAR, SCE, ISO, YRS) <span class="sc">|&gt;</span>                            <span class="co"># Group by variable, scenario, ISO, and year</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">GDPI =</span> <span class="fu">sum</span>(POP, <span class="at">na.rm =</span> T))                      <span class="co"># Sum GDP values, handling missing data</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare GDP from OECD ENV-Growth dataset (GDPO)</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>GDPO <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(MOD <span class="sc">==</span> <span class="st">"OECD ENV-Growth 2023"</span>) <span class="sc">|&gt;</span>                  <span class="co"># Select GDP from OECD ENV-Growth dataset</span></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(VAR, SCE, ISO, YRS) <span class="sc">|&gt;</span>                           <span class="co"># Group by variable, scenario, ISO, and year</span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">GDPO =</span> <span class="fu">sum</span>(POP, <span class="at">na.rm =</span> T))                     <span class="co"># Sum GDP values, handling missing data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare population (POP) dataset</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>POP <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(MOD <span class="sc">==</span> <span class="st">"IIASA-WiC POP 2023"</span>) <span class="sc">|&gt;</span>               <span class="co"># Select population model</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(GND <span class="sc">!=</span> <span class="st">"TOTL"</span>) <span class="sc">|&gt;</span>                             <span class="co"># Exclude total gender records</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(SCE, ISO, GND, YRS, AGE) <span class="sc">|&gt;</span>                <span class="co"># Group by scenario, ISO, gender, year, and age</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">POP =</span> <span class="fu">sum</span>(POP, <span class="at">na.rm =</span> T))                 <span class="co"># Sum population values, handling missing data</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare GDP projections (GDPI)</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>GDPI <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span> </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">complete</span>(MOD, VAR, SCE, ISO, YRS, <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">POP =</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span> <span class="co"># Ensure all combinations exist with default values</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(MOD <span class="sc">==</span> <span class="st">"IIASA GDP 2023"</span>) <span class="sc">|&gt;</span>                         <span class="co"># Select IIASA GDP projections model</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(VAR <span class="sc">!=</span> <span class="st">"Population"</span>) <span class="sc">|&gt;</span>                             <span class="co"># Exclude population variables</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(VAR, SCE, ISO, YRS) <span class="sc">|&gt;</span>                            <span class="co"># Group by variable, scenario, ISO, and year</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">GDPI =</span> <span class="fu">sum</span>(POP, <span class="at">na.rm =</span> T))                      <span class="co"># Sum GDP values, handling missing data</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare GDP from OECD ENV-Growth dataset (GDPO)</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>GDPO <span class="ot">&lt;-</span> gtap_ssp <span class="sc">|&gt;</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(MOD <span class="sc">==</span> <span class="st">"OECD ENV-Growth 2023"</span>) <span class="sc">|&gt;</span>                  <span class="co"># Select GDP from OECD ENV-Growth dataset</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(VAR, SCE, ISO, YRS) <span class="sc">|&gt;</span>                           <span class="co"># Group by variable, scenario, ISO, and year</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">GDPO =</span> <span class="fu">sum</span>(POP, <span class="at">na.rm =</span> T))                     <span class="co"># Sum GDP values, handling missing data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="convert-to-arrays-and-add-descriptions" class="level3" data-number="8.0.1">
-<h3 data-number="8.0.1" class="anchored" data-anchor-id="convert-to-arrays-and-add-descriptions"><span class="header-section-number">8.0.1</span> Convert to Arrays and Add Descriptions</h3>
+<section id="convert-to-arrays-and-add-descriptions" class="level3" data-number="10.0.1">
+<h3 data-number="10.0.1" class="anchored" data-anchor-id="convert-to-arrays-and-add-descriptions"><span class="header-section-number">10.0.1</span> Convert to Arrays and Add Descriptions</h3>
 <p>The processed datasets (<code>POP</code>, <code>GDPI</code>, and <code>GDPO</code>) are converted into arrays, rearranged to 5 dimensions and labeled with descriptive attributes. These arrays are required for saving into <code>.har</code> format.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine datasets into arrays</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">POP =</span> <span class="fu">array</span>(</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    POP <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(POP),                                      <span class="co"># Extract population values</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">dim =</span> <span class="fu">rev</span>(<span class="fu">sapply</span>(POP <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>POP), <span class="cf">function</span>(x) <span class="fu">length</span>(<span class="fu">unique</span>(x)))), <span class="co"># Define dimensions</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">rev</span>(<span class="fu">lapply</span>(POP <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>POP), <span class="cf">function</span>(x) <span class="fu">unique</span>(x)))     <span class="co"># Define dimension names</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">aperm</span>(<span class="fu">rev</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(POP) <span class="sc">-</span> <span class="dv">1</span>))),                           <span class="co"># Adjust dimension order</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">GDPI =</span> <span class="fu">array</span>(</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    GDPI <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(GDPI),                                    <span class="co"># Extract GDP values (IIASA)</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">dim =</span> <span class="fu">rev</span>(<span class="fu">sapply</span>(GDPI <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>GDPI), <span class="cf">function</span>(x) <span class="fu">length</span>(<span class="fu">unique</span>(x)))), <span class="co"># Define dimensions</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">rev</span>(<span class="fu">lapply</span>(GDPI <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>GDPI), <span class="cf">function</span>(x) <span class="fu">unique</span>(x)))     <span class="co"># Define dimension names</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">aperm</span>(<span class="fu">rev</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(GDPI) <span class="sc">-</span> <span class="dv">1</span>))),                          <span class="co"># Adjust dimension order</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">GDPO =</span> <span class="fu">array</span>(</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    GDPO <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(GDPO),                                    <span class="co"># Extract GDP values (OECD)</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">dim =</span> <span class="fu">rev</span>(<span class="fu">sapply</span>(GDPO <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>GDPO), <span class="cf">function</span>(x) <span class="fu">length</span>(<span class="fu">unique</span>(x)))), <span class="co"># Define dimensions</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">rev</span>(<span class="fu">lapply</span>(GDPO <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>GDPO), <span class="cf">function</span>(x) <span class="fu">unique</span>(x)))     <span class="co"># Define dimension names</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">aperm</span>(<span class="fu">rev</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(GDPO) <span class="sc">-</span> <span class="dv">1</span>)))                           <span class="co"># Adjust dimension order</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Add descriptive metadata to arrays</span></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(data<span class="sc">$</span>POP, <span class="st">"description"</span>) <span class="ot">&lt;-</span> <span class="st">"IIASA-WiC POP 2023 (million people)"</span>       <span class="co"># Population description</span></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(data<span class="sc">$</span>GDPI, <span class="st">"description"</span>) <span class="ot">&lt;-</span> <span class="st">"IIASA GDP 2023 (USD_2017/yr)"</span>             <span class="co"># GDP projections description</span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(data<span class="sc">$</span>GDPO, <span class="st">"description"</span>) <span class="ot">&lt;-</span> <span class="st">"OECD ENV-Growth 2023 (USD_2017/yr)"</span>       <span class="co"># OECD GDP description</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine datasets into arrays</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">POP =</span> <span class="fu">array</span>(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    POP <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(POP),                                      <span class="co"># Extract population values</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">dim =</span> <span class="fu">rev</span>(<span class="fu">sapply</span>(POP <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>POP), <span class="cf">function</span>(x) <span class="fu">length</span>(<span class="fu">unique</span>(x)))), <span class="co"># Define dimensions</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">rev</span>(<span class="fu">lapply</span>(POP <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>POP), <span class="cf">function</span>(x) <span class="fu">unique</span>(x)))     <span class="co"># Define dimension names</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">aperm</span>(<span class="fu">rev</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(POP) <span class="sc">-</span> <span class="dv">1</span>))),                           <span class="co"># Adjust dimension order</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">GDPI =</span> <span class="fu">array</span>(</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    GDPI <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(GDPI),                                    <span class="co"># Extract GDP values (IIASA)</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">dim =</span> <span class="fu">rev</span>(<span class="fu">sapply</span>(GDPI <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>GDPI), <span class="cf">function</span>(x) <span class="fu">length</span>(<span class="fu">unique</span>(x)))), <span class="co"># Define dimensions</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">rev</span>(<span class="fu">lapply</span>(GDPI <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>GDPI), <span class="cf">function</span>(x) <span class="fu">unique</span>(x)))     <span class="co"># Define dimension names</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">aperm</span>(<span class="fu">rev</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(GDPI) <span class="sc">-</span> <span class="dv">1</span>))),                          <span class="co"># Adjust dimension order</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">GDPO =</span> <span class="fu">array</span>(</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    GDPO <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(GDPO),                                    <span class="co"># Extract GDP values (OECD)</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">dim =</span> <span class="fu">rev</span>(<span class="fu">sapply</span>(GDPO <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>GDPO), <span class="cf">function</span>(x) <span class="fu">length</span>(<span class="fu">unique</span>(x)))), <span class="co"># Define dimensions</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">rev</span>(<span class="fu">lapply</span>(GDPO <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>GDPO), <span class="cf">function</span>(x) <span class="fu">unique</span>(x)))     <span class="co"># Define dimension names</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">aperm</span>(<span class="fu">rev</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(GDPO) <span class="sc">-</span> <span class="dv">1</span>)))                           <span class="co"># Adjust dimension order</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Add descriptive metadata to arrays</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(data<span class="sc">$</span>POP, <span class="st">"description"</span>) <span class="ot">&lt;-</span> <span class="st">"IIASA-WiC POP 2023 (million people)"</span>       <span class="co"># Population description</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(data<span class="sc">$</span>GDPI, <span class="st">"description"</span>) <span class="ot">&lt;-</span> <span class="st">"IIASA GDP 2023 (USD_2017/yr)"</span>             <span class="co"># GDP projections description</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(data<span class="sc">$</span>GDPO, <span class="st">"description"</span>) <span class="ot">&lt;-</span> <span class="st">"OECD ENV-Growth 2023 (USD_2017/yr)"</span>       <span class="co"># OECD GDP description</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="export-to-.har-file" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="export-to-.har-file"><span class="header-section-number">8.1</span> Export to .har File</h2>
+<section id="export-to-.har-file" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="export-to-.har-file"><span class="header-section-number">10.1</span> Export to .har File</h2>
 <p>Save the prepared data arrays into a <code>.har</code> file using the <code>HARr::write_har</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export datasets to a .har file</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>HARr<span class="sc">::</span><span class="fu">write_har</span>(data, <span class="st">"gtap_ssp.har"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export datasets to a .har file</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>HARr<span class="sc">::</span><span class="fu">write_har</span>(data, <span class="st">"gtap_ssp.har"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
-<section id="optional-step-download-and-update-input-data" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> Optional Step: Download and Update input data</h1>
+<section id="optional-step-download-and-update-input-data" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Optional Step: Download and Update input data</h1>
 <p>The gtapssp::updateData function allows users to download and process the latest version of the SSPs dataset from the IIASA database. This step is optional and should be used if you want to replace the default SSP dataset included in the gtapssp package (gtapssp::iiasa_raw) with a newer version. The updated data is processed using Python’s pyam package and may take several minutes depending on the database size. For more details on the pyam package and its integration with R, visit <a href="https://pyam-iamc.readthedocs.io/en/stable/R_tutorials/pyam_R_tutorial.html">here</a>.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="optinional">
+<div>
+<pre class="mermaid mermaid-js" data-label="optinional">graph TD
+    subgraph sO["Optional Steps"]
+        A[IIASA data API] --&gt; B([Update Data: gtapssp::updateData])
+        B --&gt; R1[IIASA raw data]
+        R2[IIASA raw data] --&gt; C([Create Regional Mappings: gtapssp::updateCorresp])
+        R7[Custom regional correspondences] --&gt; C
+        C --&gt; R3[New Regional correspondences]
+    end
+
+</pre>
+</div>
+</div>
+</div>
+</div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the Python executable path and output file location</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pythonExePath <span class="ot">&lt;-</span> <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">tsimonat</span><span class="sc">\\</span><span class="st">AppData</span><span class="sc">\\</span><span class="st">Local</span><span class="sc">\\</span><span class="st">Programs</span><span class="sc">\\</span><span class="st">Python</span><span class="sc">\\</span><span class="st">Python312</span><span class="sc">\\</span><span class="st">python.exe"</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>outputFile <span class="ot">&lt;-</span> <span class="st">"data/iiasa_raw.rda"</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Download and process raw data</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>iiasa_raw <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">updateData</span>(</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pythonExePath =</span> pythonExePath,</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputFile =</span> outputFile</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>updateData</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the Python executable path and output file location</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>pythonExePath <span class="ot">&lt;-</span> <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">tsimonat</span><span class="sc">\\</span><span class="st">AppData</span><span class="sc">\\</span><span class="st">Local</span><span class="sc">\\</span><span class="st">Programs</span><span class="sc">\\</span><span class="st">Python</span><span class="sc">\\</span><span class="st">Python312</span><span class="sc">\\</span><span class="st">python.exe"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>outputFile <span class="ot">&lt;-</span> <span class="st">"data/iiasa_raw.rda"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Download and process raw data</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>iiasa_raw <span class="ot">&lt;-</span> gtapssp<span class="sc">::</span><span class="fu">updateData</span>(</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pythonExePath =</span> pythonExePath,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputFile =</span> outputFile</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>updateData</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can also use the <code>gtapssp::updateCorresp</code> function to apply custom regional mappings, allowing flexibility to aggregate the dataset according to your specific requirements.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update regional correspondences</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span><span class="fu">updateCorresp</span>(</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">iiasa_raw =</span> iiasa_raw, <span class="co"># or gtapssp::iiasa_raw for use default input data</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">corresp_reg =</span> gtapssp<span class="sc">::</span>corresp_reg <span class="co"># or a custom vector of regional correspondences</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>updateCorresp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update regional correspondences</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span><span class="fu">updateCorresp</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">iiasa_raw =</span> iiasa_raw, <span class="co"># or gtapssp::iiasa_raw for use default input data</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">corresp_reg =</span> gtapssp<span class="sc">::</span>corresp_reg <span class="co"># or a custom vector of regional correspondences</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Funcion documentation:</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>?gtapssp<span class="sc">::</span>updateCorresp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The default regional mapping included in the package is displayed below. This mapping aggregates the data to 251 regions using <code>reg_iso3</code> as the reference. However, it could be aggregated to the 160 GTAP regions by using the <code>reg_gtap_code</code> column to agreggate instead of <code>reg_iso3.</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>corresp_reg[, <span class="fu">c</span>(<span class="st">"reg_iso3"</span>, <span class="st">"cty_names"</span>, <span class="st">"reg_gtap_code"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>gtapssp<span class="sc">::</span>corresp_reg[, <span class="fu">c</span>(<span class="st">"reg_iso3"</span>, <span class="st">"cty_names"</span>, <span class="st">"reg_gtap_code"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-616824be5c4f589d40a2" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-616824be5c4f589d40a2">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200"],["AUS","NZL","FJI","PYF","GUM","KIR","FSM","NCL","PNG","WSM","SLB","TON","VUT","CHN","HKG","JPN","KOR","MNG","TWN","MAC","PRK","BRN","KHM","IDN","LAO","MYS","PHL","SGP","THA","VNM","MMR","TLS","AFG","BGD","IND","NPL","PAK","LKA","BTN","MDV","CAN","USA","MEX","ARG","BOL","BRA","CHL","COL","ECU","PRY","PER","URY","VEN","GUF","GUY","SUR","CRI","GTM","HND","NIC","PAN","SLV","BLZ","DOM","HTI","JAM","PRI","TTO","ATG","ABW","BHS","BRB","CUB","CUW","GRD","LCA","VCT","VIR","AUT","BEL","BGR","HRV","CYP","CZE","DNK","EST","FIN","FRA","GLP","MTQ","REU","DEU","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","POL","PRT","ROU","SVK","SVN","ESP","SWE","GBR","CHE","NOR","ISL","ALB","SRB","BLR","RUS","UKR","MDA","BIH","MNE","MKD","KAZ","KGZ","TJK","UZB","TKM","ARM","AZE","GEO","BHR","IRN","IRQ","ISR","JOR","KWT","LBN","OMN","PSE","QAT","SAU","SYR","TUR","ARE","YEM","DZA","EGY","MAR","TUN","LBY","ESH","BEN","BFA","CMR","CIV","GHA","GIN","MLI","NER","NGA","SEN","TGO","CPV","GMB","GNB","LBR","MRT","SLE","CAF","TCD","COG","COD","GNQ","GAB","AGO","STP","COM","ETH","KEN","MDG","MWI","MUS","MOZ","RWA","SDN","TZA","UGA","ZMB","ZWE","BDI","DJI","ERI","MYT","SYC","SOM","SSD","BWA","SWZ","NAM","ZAF","LSO"],["Australia","New Zealand","Fiji","French Polynesia","Guam","Kiribati","Federated States of Micronesia","New Caledonia","Papua New Guinea","Samoa","Solomon Islands","Tonga","Vanuatu","China","Hong Kong","Japan","South Korea","Mongolia","Taiwan","Macao","North Korea","Brunei Darussalam","Cambodia","Indonesia","Laos","Malaysia","Philippines","Singapore","Thailand","Viet Nam","Myanmar","Timor-Leste","Afghanistan","Bangladesh","India","Nepal","Pakistan","Sri Lanka","Bhutan","Maldives","Canada","United States","Mexico","Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","Paraguay","Peru","Uruguay","Venezuela","French Guiana","Guyana","Suriname","Costa Rica","Guatemala","Honduras","Nicaragua","Panama","El Salvador","Belize","Dominican Republic","Haiti","Jamaica","Puerto Rico","Trinidad and Tobago","Antigua and Barbuda","Aruba","Bahamas","Barbados","Cuba","Curaçao","Grenada","Saint Lucia","Saint Vincent and the Grenadines","United States Virgin Islands","Austria","Belgium","Bulgaria","Croatia","Cyprus","Czechia","Denmark","Estonia","Finland","France","Guadeloupe","Martinique","Réunion","Germany","Greece","Hungary","Ireland","Italy","Latvia","Lithuania","Luxembourg","Malta","Netherlands","Poland","Portugal","Romania","Slovakia","Slovenia","Spain","Sweden","United Kingdom","Switzerland","Norway","Iceland","Albania","Serbia","Belarus","Russian Federation","Ukraine","Moldova","Bosnia and Herzegovina","Montenegro","North Macedonia","Kazakhstan","Kyrgyzstan","Tajikistan","Uzbekistan","Turkmenistan","Armenia","Azerbaijan","Georgia","Bahrain","Iran","Iraq","Israel","Jordan","Kuwait","Lebanon","Oman","Palestine","Qatar","Saudi Arabia","Syria","Turkey","United Arab Emirates","Yemen","Algeria","Egypt","Morocco","Tunisia","Libya","Western Sahara","Benin","Burkina Faso","Cameroon","Côte d'Ivoire","Ghana","Guinea","Mali","Niger","Nigeria","Senegal","Togo","Cabo Verde","Gambia","Guinea-Bissau","Liberia","Mauritania","Sierra Leone","Central African Republic","Chad","Congo","Democratic Republic of the Congo","Equatorial Guinea","Gabon","Angola","Sao Tome and Principe","Comoros","Ethiopia","Kenya","Madagascar","Malawi","Mauritius","Mozambique","Rwanda","Sudan","Tanzania","Uganda","Zambia","Zimbabwe","Burundi","Djibouti","Eritrea","Mayotte","Seychelles","Somalia","South Sudan","Botswana","Eswatini","Namibia","South Africa","Lesotho"],["AUS","NZL","XOC","XOC","XOC","XOC","XOC","XOC","XOC","XOC","XOC","XOC","XOC","CHN","HKG","JPN","KOR","MNG","TWN","XEA","XEA","BRN","KHM","IDN","LAO","MYS","PHL","SGP","THA","VNM","XSE","XSE","AFG","BGD","IND","NPL","PAK","LKA","XSA","XSA","CAN","USA","MEX","ARG","BOL","BRA","CHL","COL","ECU","PRY","PER","URY","VEN","XSM","XSM","XSM","CRI","GTM","HND","NIC","PAN","SLV","XCA","DOM","HTI","JAM","PRI","TTO","XCB","XCB","XCB","XCB","XCB","XCB","XCB","XCB","XCB","XCB","AUT","BEL","BGR","HRV","CYP","CZE","DNK","EST","FIN","FRA","FRA","FRA","FRA","DEU","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","POL","PRT","ROU","SVK","SVN","ESP","SWE","GBR","CHE","NOR","XEF","ALB","SRB","BLR","RUS","UKR","XEE","XER","XER","XER","KAZ","KGZ","TJK","UZB","XSU","ARM","AZE","GEO","BHR","IRN","IRQ","ISR","JOR","KWT","LBN","OMN","PSE","QAT","SAU","SYR","TUR","ARE","XWS","DZA","EGY","MAR","TUN","XNF","XNF","BEN","BFA","CMR","CIV","GHA","GIN","MLI","NER","NGA","SEN","TGO","XWF","XWF","XWF","XWF","XWF","XWF","CAF","TCD","COG","COD","GNQ","GAB","XAC","XAC","COM","ETH","KEN","MDG","MWI","MUS","MOZ","RWA","SDN","TZA","UGA","ZMB","ZWE","XEC","XEC","XEC","XEC","XEC","XEC","XEC","BWA","SWZ","NAM","ZAF","XSC"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>reg_iso3<\/th>\n      <th>cty_names<\/th>\n      <th>reg_gtap_code<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"reg_iso3","targets":1},{"name":"cty_names","targets":2},{"name":"reg_gtap_code","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-c6878d07717f628ac05c" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-c6878d07717f628ac05c">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200"],["AUS","NZL","FJI","PYF","GUM","KIR","FSM","NCL","PNG","WSM","SLB","TON","VUT","CHN","HKG","JPN","KOR","MNG","TWN","MAC","PRK","BRN","KHM","IDN","LAO","MYS","PHL","SGP","THA","VNM","MMR","TLS","AFG","BGD","IND","NPL","PAK","LKA","BTN","MDV","CAN","USA","MEX","ARG","BOL","BRA","CHL","COL","ECU","PRY","PER","URY","VEN","GUF","GUY","SUR","CRI","GTM","HND","NIC","PAN","SLV","BLZ","DOM","HTI","JAM","PRI","TTO","ATG","ABW","BHS","BRB","CUB","CUW","GRD","LCA","VCT","VIR","AUT","BEL","BGR","HRV","CYP","CZE","DNK","EST","FIN","FRA","GLP","MTQ","REU","DEU","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","POL","PRT","ROU","SVK","SVN","ESP","SWE","GBR","CHE","NOR","ISL","ALB","SRB","BLR","RUS","UKR","MDA","BIH","MNE","MKD","KAZ","KGZ","TJK","UZB","TKM","ARM","AZE","GEO","BHR","IRN","IRQ","ISR","JOR","KWT","LBN","OMN","PSE","QAT","SAU","SYR","TUR","ARE","YEM","DZA","EGY","MAR","TUN","LBY","ESH","BEN","BFA","CMR","CIV","GHA","GIN","MLI","NER","NGA","SEN","TGO","CPV","GMB","GNB","LBR","MRT","SLE","CAF","TCD","COG","COD","GNQ","GAB","AGO","STP","COM","ETH","KEN","MDG","MWI","MUS","MOZ","RWA","SDN","TZA","UGA","ZMB","ZWE","BDI","DJI","ERI","MYT","SYC","SOM","SSD","BWA","SWZ","NAM","ZAF","LSO"],["Australia","New Zealand","Fiji","French Polynesia","Guam","Kiribati","Federated States of Micronesia","New Caledonia","Papua New Guinea","Samoa","Solomon Islands","Tonga","Vanuatu","China","Hong Kong","Japan","South Korea","Mongolia","Taiwan","Macao","North Korea","Brunei Darussalam","Cambodia","Indonesia","Laos","Malaysia","Philippines","Singapore","Thailand","Viet Nam","Myanmar","Timor-Leste","Afghanistan","Bangladesh","India","Nepal","Pakistan","Sri Lanka","Bhutan","Maldives","Canada","United States","Mexico","Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","Paraguay","Peru","Uruguay","Venezuela","French Guiana","Guyana","Suriname","Costa Rica","Guatemala","Honduras","Nicaragua","Panama","El Salvador","Belize","Dominican Republic","Haiti","Jamaica","Puerto Rico","Trinidad and Tobago","Antigua and Barbuda","Aruba","Bahamas","Barbados","Cuba","Curaçao","Grenada","Saint Lucia","Saint Vincent and the Grenadines","United States Virgin Islands","Austria","Belgium","Bulgaria","Croatia","Cyprus","Czechia","Denmark","Estonia","Finland","France","Guadeloupe","Martinique","Réunion","Germany","Greece","Hungary","Ireland","Italy","Latvia","Lithuania","Luxembourg","Malta","Netherlands","Poland","Portugal","Romania","Slovakia","Slovenia","Spain","Sweden","United Kingdom","Switzerland","Norway","Iceland","Albania","Serbia","Belarus","Russian Federation","Ukraine","Moldova","Bosnia and Herzegovina","Montenegro","North Macedonia","Kazakhstan","Kyrgyzstan","Tajikistan","Uzbekistan","Turkmenistan","Armenia","Azerbaijan","Georgia","Bahrain","Iran","Iraq","Israel","Jordan","Kuwait","Lebanon","Oman","Palestine","Qatar","Saudi Arabia","Syria","Turkey","United Arab Emirates","Yemen","Algeria","Egypt","Morocco","Tunisia","Libya","Western Sahara","Benin","Burkina Faso","Cameroon","Côte d'Ivoire","Ghana","Guinea","Mali","Niger","Nigeria","Senegal","Togo","Cabo Verde","Gambia","Guinea-Bissau","Liberia","Mauritania","Sierra Leone","Central African Republic","Chad","Congo","Democratic Republic of the Congo","Equatorial Guinea","Gabon","Angola","Sao Tome and Principe","Comoros","Ethiopia","Kenya","Madagascar","Malawi","Mauritius","Mozambique","Rwanda","Sudan","Tanzania","Uganda","Zambia","Zimbabwe","Burundi","Djibouti","Eritrea","Mayotte","Seychelles","Somalia","South Sudan","Botswana","Eswatini","Namibia","South Africa","Lesotho"],["AUS","NZL","XOC","XOC","XOC","XOC","XOC","XOC","XOC","XOC","XOC","XOC","XOC","CHN","HKG","JPN","KOR","MNG","TWN","XEA","XEA","BRN","KHM","IDN","LAO","MYS","PHL","SGP","THA","VNM","XSE","XSE","AFG","BGD","IND","NPL","PAK","LKA","XSA","XSA","CAN","USA","MEX","ARG","BOL","BRA","CHL","COL","ECU","PRY","PER","URY","VEN","XSM","XSM","XSM","CRI","GTM","HND","NIC","PAN","SLV","XCA","DOM","HTI","JAM","PRI","TTO","XCB","XCB","XCB","XCB","XCB","XCB","XCB","XCB","XCB","XCB","AUT","BEL","BGR","HRV","CYP","CZE","DNK","EST","FIN","FRA","FRA","FRA","FRA","DEU","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","POL","PRT","ROU","SVK","SVN","ESP","SWE","GBR","CHE","NOR","XEF","ALB","SRB","BLR","RUS","UKR","XEE","XER","XER","XER","KAZ","KGZ","TJK","UZB","XSU","ARM","AZE","GEO","BHR","IRN","IRQ","ISR","JOR","KWT","LBN","OMN","PSE","QAT","SAU","SYR","TUR","ARE","XWS","DZA","EGY","MAR","TUN","XNF","XNF","BEN","BFA","CMR","CIV","GHA","GIN","MLI","NER","NGA","SEN","TGO","XWF","XWF","XWF","XWF","XWF","XWF","CAF","TCD","COG","COD","GNQ","GAB","XAC","XAC","COM","ETH","KEN","MDG","MWI","MUS","MOZ","RWA","SDN","TZA","UGA","ZMB","ZWE","XEC","XEC","XEC","XEC","XEC","XEC","XEC","BWA","SWZ","NAM","ZAF","XSC"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>reg_iso3<\/th>\n      <th>cty_names<\/th>\n      <th>reg_gtap_code<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"reg_iso3","targets":1},{"name":"cty_names","targets":2},{"name":"reg_gtap_code","targets":3}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
