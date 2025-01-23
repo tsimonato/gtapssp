@@ -39,20 +39,22 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      # Pre-install HARr package
       - name: Install HARr from GitHub
         run: |
-          Rscript -e "install.packages('devtools')"
-          Rscript -e "devtools::install_github('USDA-ERS/MTED-HARr')"
+          install.packages("devtools")
+          devtools::install_github('USDA-ERS/MTED-HARr', upgrade = "never")
 
-      # Install other dependencies
+      - name: Set Library Path
+        run: echo ".libPaths('D:/a/_temp/Library')" >> ~/.Rprofile
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
             any::rcmdcheck
-          install-opts: '--no-lock'
+          install-opts: "--no-lock"
+        env:
+          R_LIBS_USER: D:/a/_temp/Library
 
-      # Run package checks
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
