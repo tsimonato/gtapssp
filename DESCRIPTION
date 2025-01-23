@@ -17,6 +17,7 @@ Imports:
     data.table (>= 1.14.8),
     dplyr,
     tidyr,
+    devtools,
     HARr,
     tools,
     reticulate,
