@@ -13,22 +13,6 @@
 #' @return Either a single combined data frame or a list of data frames, depending on the value of `combine_vertically`.
 #' @import data.table
 #' @importFrom tools file_path_sans_ext
-#' @examples
-#' # Assuming ZIP files are in 'path/to/zip/files'
-#' combined_data <- combine_csv_from_zip(
-#'   zip_dir = "path/to/zip/files",
-#'   zip_pattern = "zip_file_pattern",
-#'   csv_pattern = "csv_file_pattern",
-#'   combine_vertically = TRUE
-#' )
-#'
-#' # To get a list of data frames instead of a combined one
-#' data_list <- combine_csv_from_zip(
-#'   zip_dir = "path/to/zip/files",
-#'   zip_pattern = "zip_file_pattern",
-#'   csv_pattern = "csv_file_pattern",
-#'   combine_vertically = FALSE
-#' )
 #' @export
 read_csv_from_zip <- function(zip_dir, zip_pattern, csv_pattern, combine_vertically = TRUE) {
   # List all ZIP files matching the pattern in the given directory

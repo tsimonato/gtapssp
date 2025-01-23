@@ -25,20 +25,3 @@ It then extracts CSV files from these ZIP archives that match another specified 
 The function can either combine these CSV files vertically into a single data frame or return
 them as separate data frames in a list. Each data frame in the list is named after its respective CSV file.
 }
-\examples{
-# Assuming ZIP files are in 'path/to/zip/files'
-combined_data <- combine_csv_from_zip(
-  zip_dir = "path/to/zip/files",
-  zip_pattern = "zip_file_pattern",
-  csv_pattern = "csv_file_pattern",
-  combine_vertically = TRUE
-)
-
-# To get a list of data frames instead of a combined one
-data_list <- combine_csv_from_zip(
-  zip_dir = "path/to/zip/files",
-  zip_pattern = "zip_file_pattern",
-  csv_pattern = "csv_file_pattern",
-  combine_vertically = FALSE
-)
-}
