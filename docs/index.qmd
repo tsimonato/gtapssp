@@ -100,6 +100,12 @@ You can install the development version of *gtapssp* from [GitHub](https://githu
 #| echo: true
 #| eval: false
 
+if (!requireNamespace('remotes', quietly = TRUE)){ install.packages('remotes')} 
+gert::git_add_all()
+gert::git_commit("Corrige workflow do GitHub Actions para execução correta")
+gert::git_push()
+
+
 # If the devtools package is not already installed, please run the disabled line below.
 # install.packages("devtools")
 devtools::install_github("tsimonato/gtapssp")
