@@ -1,6 +1,11 @@
-# GTAPSSP: Tools for Processing SSPs in the GTAP Framework
+# GTAPSSP: SSPs for GTAP Framework
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/tsimonato/gtapssp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tsimonato/gtapssp/actions/workflows/R-CMD-check.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)  
+<!-- badges: end -->
+
+
 A comprehensive R package designed to preprocess, aggregate, interpolate, and expand **Shared Socioeconomic Pathways (SSPs)** data for seamless integration with the **Global Trade Analysis Project (GTAP)** framework.
 
 ## 📖 Overview
@@ -25,7 +30,7 @@ To install the development version of `gtapssp` from GitHub:
 install.packages("devtools")
 
 # Install gtapssp from GitHub
-devtools::install_github("your-username/gtapssp")
+devtools::install_github("/gtapssp")
 ```
 
 ## 🛠️ Key Features
@@ -82,13 +87,14 @@ gtapssp::iiasa_gtap(outFile = "gtap_ssp.har")
 
 ## 📚 Documentation
 
-- [Package Manual](https://github.com/your-username/gtapssp/raw/main/docs/gtapssp_manual.pdf)
+- [Package Manual](https://github.com//gtapssp/raw/main/docs/gtapssp_manual.pdf)
+- [Tutorial and Examples](https://tsimonato.github.io/gtapssp/)
 - Explore function-specific documentation using `?function_name` in R.
 
 ## 🤝 Contributions
 
 We welcome contributions to enhance **GTAPSSP**! Feel free to:
-- Open an [issue](https://github.com/your-username/gtapssp/issues) to report bugs or suggest features.
+- Open an [issue](https://github.com//gtapssp/issues) to report bugs or suggest features.
 - Fork the repository and submit a pull request.
 
 ## 📝 License
