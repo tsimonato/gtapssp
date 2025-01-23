@@ -44,9 +44,11 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
-            any::HARr
-        remotes: |
-            USDA-ERS/MTED-HARr
+
+      # Install HARr from GitHub
+      - name: Install HARr
+        run: |
+          Rscript -e "devtools::install_github('USDA-ERS/MTED-HARr')"
 
       - uses: r-lib/actions/check-r-package@v2
         with:
