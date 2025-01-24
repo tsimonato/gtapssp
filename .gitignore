@@ -45,4 +45,4 @@ setup.R
 *.qmd
 docs/index.qmd
 docs/index_gtapssp.qmd
-data/output.csv
+out.csv
