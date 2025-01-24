@@ -55,9 +55,12 @@ jobs:
       - name: Ensure rcmdcheck is installed
         run: |
           Rscript -e "if (!requireNamespace('rcmdcheck', quietly = TRUE)) install.packages('rcmdcheck')"
+          Rscript -e "print(installed.packages())"
 
-      - name: Set Library Path
-        run: echo ".libPaths('D:/a/_temp/Library')" >> ~/.Rprofile
+      - name: Configure Library Path
+        run: |
+          echo ".libPaths('/Users/runner/work/_temp/Library')" >> ~/.Rprofile
+          Rscript -e ".libPaths()"
 
       - uses: r-lib/actions/check-r-package@v2
         with:
