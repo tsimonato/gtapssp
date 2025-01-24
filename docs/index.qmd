@@ -171,7 +171,7 @@ If you'd like to execute the entire pipeline described in this tutorial with min
 Here’s an example:
 
 ```{r}
-#| eval: false
+#| eval: true
 ssp_data <- gtapssp::iiasa_gtap()
 
 ssp_data
@@ -191,11 +191,10 @@ This function provides flexibility to either return the processed dataset for fu
 ```{r}
 #| eval: false
 # Run the entire pipeline and save the output as a .HAR file
-gtapssp::iiasa_gtap(outFile = "gtap_ssp2.har")
+gtapssp::iiasa_gtap(outFile = "gtap_ssp.har")
 
 # Or save as a .CSV file
 gtapssp::iiasa_gtap(outFile = "gtap_ssp.csv")
-
 ```
 
 ::: panel-tabset
@@ -204,7 +203,6 @@ gtapssp::iiasa_gtap(outFile = "gtap_ssp.csv")
 Below is a spatial representation of the population data. The map below highlights population estimates for females (GND == "FEML"), aged 65 and above (AGE == "P65UP") in the year 1950 (YRS == "Y1950"), under the SSP1 scenario (SCE == "SSP1"). The data is sourced from the IIASA-WiC POP 2023 dataset (MOD == "IIASA-WiC POP 2023").
 
 ```{r}
-
 # If the gtaptools package is not already installed, please run the disabled line below.
 # devtools::install_github("tsimonato/gtaptools")
 
