@@ -45,6 +45,10 @@ usethis::use_github_action("check-standard")
 if (!requireNamespace('remotes', quietly = TRUE)){ install.packages('remotes')} 
 gert::git_commit_all("Corrige workflow do GitHub Actions para execução correta")
 gert::git_push()
+
+
+
+
 Encoding(gtapssp::isoList$Region)
 
 # Load the data from CSV
