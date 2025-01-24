@@ -85,7 +85,7 @@ R is a versatile programming language, with a focus on statistical computing. It
 -   Install the gfortran compiler, as also indicated on the [R Tools for Mac](https://mac.r-project.org/tools/) page.
 :::
 
-::: {.callout-tip collapse="true"}
+:::: {.callout-tip collapse="true"}
 ## Python install details
 
 ::: callout-important
@@ -96,10 +96,9 @@ Python is a general-purpose programming language that is becoming increasingly p
 
 1.  Download Python from the [Python Software Foundation](https://www.python.org/downloads/).
 
-2. Run the installer and make sure to check the box that says “Add Python to PATH” before clicking on “Install Now”.\
-![](images/clipboard-1705657641.png)
-
-:::
+2.  Run the installer and make sure to check the box that says “Add Python to PATH” before clicking on “Install Now”.\
+    ![](images/clipboard-1705657641.png){width="475"}
+::::
 
 ::: {.callout-tip collapse="true"}
 ## IDE install details
@@ -574,4 +573,5 @@ gtapssp::corresp_reg[, c("reg_iso3", "cty_names", "reg_gtap_code")]
 #| message: false
 DT::datatable(gtapssp::corresp_reg[, c("reg_iso3", "cty_names", "reg_gtap_code")])
 ```
+
 ::::::
