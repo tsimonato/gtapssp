@@ -169,13 +169,53 @@ Here’s an example:
 ```{r}
 #| eval: false
 # Run the entire pipeline and save the output as a .HAR file
-gtapssp::iiasa_gtap(outFile = "gtap_ssp.har")
+gtapssp::iiasa_gtap(outFile = "gtap_ssp2.har")
 
 # Or save as a .CSV file
 gtapssp::iiasa_gtap(outFile = "gtap_ssp.csv")
 
 # To simply process the data without saving it
-final_data <- gtapssp::iiasa_gtap()
+ssp_data <- gtapssp::iiasa_gtap()
+
+ssp_data <- final_data
+
+
+# Load required libraries
+library(gtaptools)
+library(ggplot2)  # For additional customization if needed
+
+data_map  <- final_data |> 
+  dplyr::mutate(iso_a3 = ISO) |> 
+  dplyr::filter(MOD == "IIASA-WiC POP 2023",
+                SCE == "SSP1",
+                GND == "FEML",
+                AGE == "P65UP",
+                YRS == "Y1950")
+# Example: Plot a map using the `plot_map` function
+gtaptools::plot_map(
+  input_data = data_map,       # Your data frame
+  value_var = "POP",    # Replace with the column name for numeric values to plot
+  colors = "viridis",
+  legend_title = "Million people",        # Replace with a title for your legend
+)
+
+gtap_ssp$MOD |> unique()
+data_map  <- gtap_ssp |> 
+  dplyr::mutate(iso_a3 = ISO) |> 
+  dplyr::filter(MOD == "OECD ENV-Growth 2023",
+                VAR == "GDP_PER_CAPI",
+                SCE == "SSP1",
+                YRS == "Y2100")
+# Example: Plot a map using the `plot_map` function
+gtaptools::plot_map(
+  input_data = data_map,       # Your data frame
+  value_var = "value",    # Replace with the column name for numeric values to plot
+  colors = "viridis",
+  legend_title = "Million people",        # Replace with a title for your legend
+)
+
+
+
 ```
 
 This function provides flexibility to either save the output in .har or .csv formats or return the processed dataset for further use in R.
@@ -472,6 +512,12 @@ gtap_ssp <- gtap_ssp |>
     )
   )
 
+gtap_ssp <- gtap_ssp  |>    
+  dplyr::filter(GND != "TOTL" | MOD != "IIASA-WiC POP 2023") |> # Exclude total gender records
+  dplyr::group_by(MOD, VAR, SCE, ISO, GND, YRS, AGE) |> 
+  dplyr::summarise(value = sum(POP, na.rm = T)) |> 
+  as.data.frame()
+
 ```
 
 # Step 5: Export data
@@ -482,24 +528,24 @@ In this step, data is processed into three separate components: population (`POP
 #| eval: false
 # Prepare population (POP) dataset
 POP <- gtap_ssp |>
-  dplyr::filter(MOD == "IIASA-WiC POP 2023") |>               # Select population model
-  dplyr::filter(GND != "TOTL") |>                             # Exclude total gender records
+   dplyr::filter(MOD == "IIASA-WiC POP 2023") |>               # Select population model
+  # dplyr::filter(GND != "TOTL") |>                             # Exclude total gender records
   dplyr::group_by(SCE, ISO, GND, YRS, AGE) |>                # Group by scenario, ISO, gender, year, and age
-  dplyr::summarise(POP = sum(POP, na.rm = T))                 # Sum population values, handling missing data
+  dplyr::summarise(POP = sum(value, na.rm = T))                 # Sum population values, handling missing data
 
 # Prepare GDP projections (GDPI)
 GDPI <- gtap_ssp |> 
-  tidyr::complete(MOD, VAR, SCE, ISO, YRS, fill = list(POP = 0)) |> # Ensure all combinations exist with default values
+  tidyr::complete(MOD, VAR, SCE, ISO, YRS, fill = list(value = 0)) |> # Ensure all combinations exist with default values
   dplyr::filter(MOD == "IIASA GDP 2023") |>                         # Select IIASA GDP projections model
   dplyr::filter(VAR != "Population") |>                             # Exclude population variables
   dplyr::group_by(VAR, SCE, ISO, YRS) |>                            # Group by variable, scenario, ISO, and year
-  dplyr::summarise(GDPI = sum(POP, na.rm = T))                      # Sum GDP values, handling missing data
+  dplyr::summarise(GDPI = sum(value, na.rm = T))                      # Sum GDP values, handling missing data
 
 # Prepare GDP from OECD ENV-Growth dataset (GDPO)
 GDPO <- gtap_ssp |>
   dplyr::filter(MOD == "OECD ENV-Growth 2023") |>                  # Select GDP from OECD ENV-Growth dataset
   dplyr::group_by(VAR, SCE, ISO, YRS) |>                           # Group by variable, scenario, ISO, and year
-  dplyr::summarise(GDPO = sum(POP, na.rm = T))                     # Sum GDP values, handling missing data
+  dplyr::summarise(GDPO = sum(value, na.rm = T))                     # Sum GDP values, handling missing data
 ```
 
 The processed datasets (`POP`, `GDPI`, and `GDPO`) are converted into arrays, rearranged to 5 dimensions and labeled with descriptive attributes. These arrays are required for saving into `.har` format.

@@ -204,6 +204,12 @@ iiasa_gtap <- function(outFile = NULL,
         POP                # Keep the value unchanged for other cases
       )
     )
+  
+  gtap_ssp <- gtap_ssp  |>    
+    dplyr::filter(GND != "TOTL" | MOD != "IIASA-WiC POP 2023") |> # Exclude total gender records
+    dplyr::group_by(MOD, VAR, SCE, ISO, GND, YRS, AGE) |> 
+    dplyr::summarise(value = sum(POP, na.rm = T)) |> 
+    as.data.frame()
 
   # Step 7: Save to File (Optional)
   if (!is.null(outFile)) {
@@ -217,7 +223,7 @@ iiasa_gtap <- function(outFile = NULL,
         dplyr::filter(MOD == "IIASA-WiC POP 2023") |> # Select population model
         dplyr::filter(GND != "TOTL") |> # Exclude total gender records
         dplyr::group_by(SCE, ISO, GND, YRS, AGE) |> # Group by scenario, ISO, gender, year, and age
-        dplyr::summarise(POP = sum(POP, na.rm = T)) # Sum population values, handling missing data
+        dplyr::summarise(POP = sum(value, na.rm = T)) # Sum population values, handling missing data
 
       # Prepare GDP projections (GDPI)
       GDPI <- gtap_ssp |>
@@ -225,13 +231,13 @@ iiasa_gtap <- function(outFile = NULL,
         dplyr::filter(MOD == "IIASA GDP 2023") |> # Select IIASA GDP projections model
         dplyr::filter(VAR != "Population") |> # Exclude population variables
         dplyr::group_by(VAR, SCE, ISO, YRS) |> # Group by variable, scenario, ISO, and year
-        dplyr::summarise(GDPI = sum(POP, na.rm = T)) # Sum GDP values, handling missing data
+        dplyr::summarise(GDPI = sum(value, na.rm = T)) # Sum GDP values, handling missing data
 
       # Prepare GDP from OECD ENV-Growth dataset (GDPO)
       GDPO <- gtap_ssp |>
         dplyr::filter(MOD == "OECD ENV-Growth 2023") |> # Select GDP from OECD ENV-Growth dataset
         dplyr::group_by(VAR, SCE, ISO, YRS) |> # Group by variable, scenario, ISO, and year
-        dplyr::summarise(GDPO = sum(POP, na.rm = T)) # Sum GDP values, handling missing data
+        dplyr::summarise(GDPO = sum(value, na.rm = T)) # Sum GDP values, handling missing data
 
       # Combine datasets into arrays
       data <- list(
