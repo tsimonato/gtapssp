@@ -50,7 +50,11 @@ jobs:
           Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes')"
           Rscript -e "remotes::install_github('USDA-ERS/MTED-HARr', upgrade = 'never')"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
-          Rscript -e "remotes::install_cran(c('pkgbuild', 'rcmdcheck', 'drat'))"
+          Rscript -e "remotes::install_cran(c('pkgbuild', 'drat'))"
+
+      - name: Ensure rcmdcheck is installed
+        run: |
+          Rscript -e "if (!requireNamespace('rcmdcheck', quietly = TRUE)) install.packages('rcmdcheck')"
 
       - name: Set Library Path
         run: echo ".libPaths('D:/a/_temp/Library')" >> ~/.Rprofile
