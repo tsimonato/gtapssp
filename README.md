@@ -40,8 +40,7 @@ Aggregate raw SSP data with regional mappings using the `aggData()` function:
 ```R
 agg_data <- gtapssp::aggData(
   iiasa_raw = gtapssp::iiasa_raw,
-  corresp_reg = gtapssp::corresp_reg,
-  group_cols = c("model", "scenario", "reg_iso3", "variable", "unit")
+  corresp_reg = gtapssp::corresp_reg
 )
 ```
 
@@ -88,7 +87,7 @@ gtapssp::iiasa_gtap(outFile = "gtap_ssp.har")
 
 ## 📚 Documentation
 
-- [Package Manual](https://github.com//gtapssp/raw/main/docs/gtapssp_manual.pdf)
+- [Package Manual](https://github.com/tsimonato/gtapssp/blob/master/docs/gtapssp_0.0.0.9000.pdf)
 - [Tutorial and Examples](https://tsimonato.github.io/gtapssp/)
 - Explore function-specific documentation using `?function_name` in R.
 
