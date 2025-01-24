@@ -44,5 +44,5 @@ setup.R
 *.xlsx
 *.qmd
 docs/*.qmd
-
 out.csv
+docs/index.qmd
