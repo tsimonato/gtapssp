@@ -96,9 +96,9 @@ Python is a general-purpose programming language that is becoming increasingly p
 
 1.  Download Python from the [Python Software Foundation](https://www.python.org/downloads/).
 
-::: callout-caution
 2. Run the installer and make sure to check the box that says “Add Python to PATH” before clicking on “Install Now”.\
 ![](images/clipboard-1705657641.png)
+
 :::
 
 ::: {.callout-tip collapse="true"}
