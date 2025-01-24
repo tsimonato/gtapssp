@@ -42,12 +42,15 @@ library(knitr)
 # Set up R CMD check GitHub Actions workflow
 usethis::use_github_action("check-standard")
 
+if (!requireNamespace('remotes', quietly = TRUE)){ install.packages('remotes')} 
+gert::git_commit_all("Corrige workflow do GitHub Actions para execução correta")
+gert::git_push()
 
 ```
 
 # Introduction
 
-This tutorial demonstrates the utilization of the `gtapssp` package in R for data processing. It covers various steps such as reading, transforming, and analyzing data, making it suitable for both beginners and advanced users. 
+This tutorial demonstrates the utilization of the `gtapssp` package in R for data processing. It covers various steps such as reading, transforming, and analyzing data, making it suitable for both beginners and advanced users.
 
 The package provides optimized and user-friendly functions to **download** SSP data, **interpolate** data using **spline** and **beers** methods. The *gtapssp* functions is accompanied by detailed [manual](https://github.com/tsimonato/gtapssp/raw/master/docs/gtapssp_0.0.0.9000.pdf), you can also access this manual by running `?gtapssp` in the R console or pressing `F1` on the function name in [RStudio](https://posit.co/download/rstudio-desktop/).
 
@@ -56,33 +59,49 @@ The package provides optimized and user-friendly functions to **download** SSP d
 To use the *gtapssp* package, it's necessary to have *R* installed on your computer, which can be downloaded from [here](https://www.r-project.org/). Additionally, we recommend downloading *RStudio*, available at [here](https://posit.co/download/rstudio-desktop/), which provides a user-friendly interface to work with *R*.
 
 ::: {.callout-tip collapse="true"}
-
 ## R install details
 
 R is a versatile programming language, with a focus on statistical computing. It is a big part of academic research in the social sciences. R is free and open-source and runs on Windows, Mac OS X, and Linux.
 
-1. Download the R installer from the Comprehensive R Archive Network (CRAN)
+1.  Download the R installer from the Comprehensive R Archive Network (CRAN)
 
-- Choose the appropriate installer for your operating system and computer architecture (32-bit or 64-bit).
-- If on Mac, you will need to know if you are using an Intel or Apple Silicon (M1) processor.
-2. Run the installer and follow the instructions.
+-   Choose the appropriate installer for your operating system and computer architecture (32-bit or 64-bit).
+-   If on Mac, you will need to know if you are using an Intel or Apple Silicon (M1) processor.
 
-3. We recommend install **R Tools**. Many of the packages we will be using in this course require R Tools to be installed.
+2.  Run the installer and follow the instructions.
+
+3.  We recommend install **R Tools**. Many of the packages we will be using in this course require R Tools to be installed.
 
     If you are on Windows:
 
-- Download the latest version of the software from the [R Tools for Windows](https://cran.r-project.org/bin/windows/Rtools/) page.
-- Run the installer and follow the instructions.
+-   Download the latest version of the software from the [R Tools for Windows](https://cran.r-project.org/bin/windows/Rtools/) page.
+
+-   Run the installer and follow the instructions.
 
     If you are on Mac:
 
-- First, install the Xcode Command Line Tools. Go to the [R Tools for Mac](https://mac.r-project.org/tools/) page and follow the instructions. Note: the precise instructions will vary according to the version of macOS you are using.
-- Install the gfortran compiler, as also indicated on the [R Tools for Mac](https://mac.r-project.org/tools/) page.
+-   First, install the Xcode Command Line Tools. Go to the [R Tools for Mac](https://mac.r-project.org/tools/) page and follow the instructions. Note: the precise instructions will vary according to the version of macOS you are using.
 
+-   Install the gfortran compiler, as also indicated on the [R Tools for Mac](https://mac.r-project.org/tools/) page.
 :::
 
 ::: {.callout-tip collapse="true"}
+## Python install details
 
+::: callout-important
+Python installation is **only required** if you plan to download updated or custom datasets SSPs from the IIASA The `gtapssp` package includes a built-in default dataset, so installing Python is optional unless you wish to access the latest or alternative datasets from IIASA's API (developed in Python).
+:::
+
+Python is a general-purpose programming language that is becoming increasingly popular in the social sciences. It is free and open-source and runs on Windows, Mac OS X, and Linux.
+
+1.  Download Python from the [Python Software Foundation](https://www.python.org/downloads/).
+
+::: callout-caution
+2. Run the installer and make sure to check the box that says “Add Python to PATH” before clicking on “Install Now”.\
+![](images/clipboard-1705657641.png)
+:::
+
+::: {.callout-tip collapse="true"}
 ## IDE install details
 
 We recommend RStudio as IDE for R.
@@ -90,7 +109,6 @@ We recommend RStudio as IDE for R.
 [RStudio](https://posit.co/download/rstudio-desktop/) is by far the most popular IDE used by R programmers. It is free and open-source and comes with a console and syntax-highlighting editor that supports direct code execution, as well as tools for plotting, history, debugging, and workspace management.
 
 **Alternative**: If you are already familiar with [Visual Studio Code (VS Code)](https://code.visualstudio.com/), say because you have already used it for Python, you can also use it for R programming. You will need to do a bit of configuration to get it to work, though. If you choose to use VS Code, download and install the [R Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=Ikuyadeu.r) and remember to follow the instructions on the *Getting Started* section of the extension page.
-
 :::
 
 You can install the development version of *gtapssp* from [GitHub](https://github.com/tsimonato/gtapssp) with:
@@ -99,21 +117,15 @@ You can install the development version of *gtapssp* from [GitHub](https://githu
 #| label: install
 #| echo: true
 #| eval: false
-
-if (!requireNamespace('remotes', quietly = TRUE)){ install.packages('remotes')} 
-gert::git_add_all()
-gert::git_commit("Corrige workflow do GitHub Actions para execução correta")
-gert::git_push()
-
-
 # If the devtools package is not already installed, please run the disabled line below.
 # install.packages("devtools")
+
 devtools::install_github("tsimonato/gtapssp")
 ```
 
 # One-Line Workflow
 
-If you'd like to execute the entire pipeline described in this tutorial with minimal effort, you can use the `gtapssp::iiasa_gtap()` function. This function runs all steps, including data aggregation, interpolation, expansion, label merging, and optional file exports. 
+If you'd like to execute the entire pipeline described in this tutorial with minimal effort, you can use the `gtapssp::iiasa_gtap()` function. This function runs all steps, including data aggregation, interpolation, expansion, label merging, and optional file exports.
 
 Here’s an example:
 
@@ -133,12 +145,10 @@ This function provides flexibility to either save the output in .har or .csv for
 
 # Workflow Overview
 
-The pipeline involves the following steps:
+The standard pipeline involves the steps below. There are [Optional Steps](#optional-update-input-data) to update input data via API, which are detailed in a separate section. These steps allow for dynamically retrieving and updating specific datasets before initiating the pipeline.
 
 ```{mermaid}
 %%| label: workflow-pipeline
-%%| fig-width: 8 
-%%| fig-height: 6 
 graph TD
 
 subgraph s1["Step 1"]
@@ -212,7 +222,6 @@ Missing values in the dataset are interpolated using two methods:
 
 **`Spline` Interpolation**: Smoothly fills gaps for GDP and related variables using cubic splines. By default, the function uses the `"fmm"` method (default) for interpolation. Users can modify interpolation parameters for custom behavior. Check the function documentation for details.
 
-
 ```{r}
 #| eval: false
 # Interpolate with spline method
@@ -229,7 +238,6 @@ spline_out <- agg_iiasa |>
 ?gtapssp::interpolate_spline
 
 ```
-
 
 **`Beers` Interpolation**: Specially designed for demographic data, This function applies the Beers interpolation algorithm, which is particularly suited for age-cohort data. The default `"ordinary"` method preserves population totals while distributing values evenly across age groups. Additional parameters can be adjusted as needed; refer to the function documentation for more information.
 
@@ -262,7 +270,7 @@ beers_out <- beers_out |>
 
 ```
 
-The outputs from the Beers Interpolation (Population data) and Spline Interpolation (GDP data) are concatenated vertically into a single dataset. 
+The outputs from the Beers Interpolation (Population data) and Spline Interpolation (GDP data) are concatenated vertically into a single dataset.
 
 ```{r}
 #| eval: false
@@ -273,7 +281,6 @@ gtap_ssp <- dplyr::bind_rows(beers_out, spline_out)
 # Step 2: Expanding data
 
 The "Historical Reference" labels in the `scenario` dimension are renamed to match the SSP categories (e.g., SSP1, SSP2, ..., SSP5). This step ensures that the elements in the `scenario` dimension are aligned, enabling the creation of a continuous time series by scenario.
-
 
 ```{r}
 #| eval: false
@@ -319,12 +326,11 @@ gtap_ssp <- complete_data |>
 
 # Step 3: Joining labels
 
-This step integrates additional labels by merging auxiliary datasets with the main dataset. It uses ISO codes, educational levels, cohort categories, and gender information.
-The default label correspondences included in the package are shown below. They can be modified with external sources if needed.
+This step integrates additional labels by merging auxiliary datasets with the main dataset. It uses ISO codes, educational levels, cohort categories, and gender information. The default label correspondences included in the package are shown below. They can be modified with external sources if needed.
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Educational Level
+
 ```{r}
 #| echo: true
 #| eval: false
@@ -340,6 +346,7 @@ DT::datatable(gtapssp::educDict, options = list(pageLength = 10, scrollX = TRUE)
 ```
 
 ## Cohort Categories
+
 ```{r}
 #| echo: true
 #| eval: false
@@ -355,6 +362,7 @@ DT::datatable(gtapssp::cohortDict, options = list(pageLength = 10, scrollX = TRU
 ```
 
 ## Gender Labels
+
 ```{r}
 #| echo: true
 #| eval: false
@@ -368,7 +376,6 @@ gtapssp::genderDict
 #| message: false
 DT::datatable(gtapssp::genderDict, options = list(pageLength = 10, scrollX = TRUE))
 ```
-
 :::
 
 ```{r}
@@ -384,10 +391,9 @@ gtap_ssp <-
   dplyr::left_join(gtapssp::genderDict, by = dplyr::join_by(gender_code))
 ```
 
-
 # Step 4: Cleaning labels
 
-In this step, the dataset is refined to improve consistency and clarity. Column names are renamed to standardized 3 characters labels. Missing values in gender and age are replaced with "TOTL" (representing Total). The variable column for GDP is reclassified, such as converting "GDP|PPP" to "GDP_PPP." Additionally, the values for GDP (PPP) are adjusted by scaling them by 1000 to reflect the correct units.
+In this step, the dataset is refined to improve consistency and clarity. Column names are renamed to standardized 3 characters labels. Missing values in gender and age are replaced with "TOTL" (representing Total). The variable column for GDP is reclassified, such as converting "GDP\|PPP" to "GDP_PPP." Additionally, the values for GDP (PPP) are adjusted by scaling them by 1000 to reflect the correct units.
 
 ```{r}
 #| eval: false
@@ -435,8 +441,6 @@ gtap_ssp <- gtap_ssp |>
 
 In this step, data is processed into three separate components: population (`POP`), GDP projections (`GDPI`), and GDP from the OECD ENV-Growth dataset (`GDPO`). These datasets are then formatted as arrays and saved to a `.har` file for further use in GTAP modeling.
 
-
-
 ```{r}
 #| eval: false
 # Prepare population (POP) dataset
@@ -460,7 +464,6 @@ GDPO <- gtap_ssp |>
   dplyr::group_by(VAR, SCE, ISO, YRS) |>                           # Group by variable, scenario, ISO, and year
   dplyr::summarise(GDPO = sum(POP, na.rm = T))                     # Sum GDP values, handling missing data
 ```
-
 
 ### Convert to Arrays and Add Descriptions
 
@@ -506,7 +509,7 @@ Save the prepared data arrays into a `.har` file using the `HARr::write_har` fun
 HARr::write_har(data, "gtap_ssp.har")
 ```
 
-# Optional Step: Download and Update input data
+# Optional: Update input data {#optional-update-input-data}
 
 The gtapssp::updateData function allows users to download and process the latest version of the SSPs dataset from the IIASA database. This step is optional and should be used if you want to replace the default SSP dataset included in the gtapssp package (gtapssp::iiasa_raw) with a newer version. The updated data is processed using Python's pyam package and may take several minutes depending on the database size. For more details on the pyam package and its integration with R, visit [here](https://pyam-iamc.readthedocs.io/en/stable/R_tutorials/pyam_R_tutorial.html).
 
@@ -523,17 +526,18 @@ graph TD
 
 ```
 
+To execute the functionality of updating data through the IIASA API, the [reticulate](https://rstudio.github.io/reticulate/) R package is used as a bridge between the IIASA API (developed in Python) and the R interface. However, it is essential to have Python installed on the machine where the code will run. Additionally, the full path to the `python.exe` executable must be provided to the `gtapssp::updateData()` function, so R can access the installed Python interpreter.
 
 ```{r}
 #| eval: false
-# Define the Python executable path and output file location
-pythonExePath <- "C:\\Users\\tsimonat\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
-outputFile <- "data/iiasa_raw.rda"
+# Ensure Python is installed on your machine
+# Configure the path to the python.exe executable
+pythonExePath <- "C:\\Users\\<username>\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
 
-# Download and process raw data
+# Use the gtapssp::updateData function to download and process updated data from IIASA
 iiasa_raw <- gtapssp::updateData(
   pythonExePath = pythonExePath,
-  outputFile = outputFile
+  outputFile = "data/iiasa_raw.rda" # Location to save the processed file
 )
 
 # Funcion documentation:
@@ -570,6 +574,4 @@ gtapssp::corresp_reg[, c("reg_iso3", "cty_names", "reg_gtap_code")]
 #| message: false
 DT::datatable(gtapssp::corresp_reg[, c("reg_iso3", "cty_names", "reg_gtap_code")])
 ```
-
-
-
+::::::
