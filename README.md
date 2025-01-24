@@ -1,4 +1,4 @@
-# GTAPSSP: SSPs for GTAP Framework
+# GTAPSSP: SSPs for GTAP Framework☕
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/tsimonato/gtapssp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tsimonato/gtapssp/actions/workflows/R-CMD-check.yaml)
