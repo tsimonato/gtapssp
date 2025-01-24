@@ -1,4 +1,4 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Workflow for R package CI
 on:
   push:
     branches: [main, master]
@@ -18,51 +18,72 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,   r: 'release'}
+          - {os: macos-latest, r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
+          - {os: ubuntu-latest, r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest, r: 'release'}
+          - {os: ubuntu-latest, r: 'oldrel-1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
 
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v4
 
+      # Set up Pandoc
       - uses: r-lib/actions/setup-pandoc@v2
 
+      # Set up R
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      # Install system dependencies for Ubuntu
       - name: Install System Dependencies (Ubuntu only)
         if: matrix.config.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev
 
-      - name: Install HARr and dependencies
+      # Install dependencies
+      - name: Install Package Dependencies
         run: |
           Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes')"
-          Rscript -e "remotes::install_github('USDA-ERS/MTED-HARr', upgrade = 'never')"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
-          Rscript -e "remotes::install_cran(c('pkgbuild', 'drat'))"
+          Rscript -e "remotes::install_cran('rcmdcheck')"
 
-      - name: Ensure rcmdcheck is installed
+      # Verify rcmdcheck installation
+      - name: Verify Installed Packages
         run: |
-          Rscript -e "if (!requireNamespace('rcmdcheck', quietly = TRUE)) install.packages('rcmdcheck')"
+          Rscript -e "print('Installed Packages:')"
           Rscript -e "print(installed.packages())"
 
-      - name: Configure Library Path
+      # Set library paths for macOS
+      - name: Configure Library Path (macOS only)
+        if: matrix.config.os == 'macos-latest'
         run: |
           echo ".libPaths('/Users/runner/work/_temp/Library')" >> ~/.Rprofile
           Rscript -e ".libPaths()"
 
+      # Run R-CMD-check
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+          build_args: 'c("--no-manual", "--compact-vignettes=gs+qpdf")'
+
+      # Upload check artifacts
+      - name: Upload Check Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-results
+          path: |
+            **/check/*.Rcheck/
+            **/check/**/tests*/testthat/_snaps
+
+      # Optionally upload coverage results (if using)
+      # Uncomment if coverage reports are needed
+      # - uses: r-lib/actions/upload-coverage@v2
