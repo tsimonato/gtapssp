@@ -93,8 +93,8 @@ gtapssp::iiasa_gtap(outFile = "gtap_ssp.har")
 
 ## 🤝 Contributions
 
-We welcome contributions to enhance **GTAPSSP**! Feel free to:
-- Open an [issue](https://github.com//gtapssp/issues) to report bugs or suggest features.
+We welcome contributions to enhance **GTAPSSP** and feel free to:
+- Open an [issue](https://github.com/tsimonato/gtapssp/issues) to report bugs or suggest features.
 - Fork the repository and submit a pull request.
 
 ## 📝 License
