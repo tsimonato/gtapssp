@@ -43,6 +43,6 @@ setup.R
 *.bak
 *.xlsx
 *.qmd
-docs/index.qmd
-docs/index_gtapssp.qmd
+docs/*.qmd
+
 out.csv

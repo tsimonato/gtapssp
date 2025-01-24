@@ -209,7 +209,7 @@
 
 \title{GTAPSSP: SSPs for GTAP Framework}
 \author{Thiago Simonato}
-\date{2025-01-23}
+\date{2025-01-24}
 
 \begin{document}
 \maketitle
@@ -223,19 +223,17 @@
 
 \section{Introduction}\label{introduction}
 
-This tutorial demonstrates the utilization of the \texttt{gtapssp}
-package in R for data processing. It covers various steps such as
-reading, transforming, and analyzing data, making it suitable for both
-beginners and advanced users.
+This tutorial demonstrates the utilization of the \emph{gtapssp} package
+in R for data processing. It covers various steps such as reading,
+transforming, and analyzing data, making it suitable for both beginners
+and advanced users.
 
-The package provides optimized and user-friendly functions to
-\textbf{download} SSP data, \textbf{interpolate} data using
-\textbf{spline} and \textbf{beers} methods. The \emph{gtapssp} functions
-is accompanied by detailed
+The package provides optimized and user-friendly functions to download
+SSP data, interpolate data using spline and beers methods. The
+\emph{gtapssp} functions is accompanied by detailed
 \href{https://github.com/tsimonato/gtapssp/raw/master/docs/gtapssp_0.0.0.9000.pdf}{manual},
-you can also access this manual by running \texttt{?gtapssp} in the R
-console or pressing \texttt{F1} on the function name in
-\href{https://posit.co/download/rstudio-desktop/}{RStudio}.
+you can also access this manual by pressing \texttt{F1} on the function
+name in \href{https://posit.co/download/rstudio-desktop/}{RStudio}.
 
 \section{Installation}\label{installation}
 
@@ -246,7 +244,7 @@ downloading \emph{RStudio}, available at
 \href{https://posit.co/download/rstudio-desktop/}{here}, which provides
 a user-friendly interface to work with \emph{R}.
 
-\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, arc=.35mm, opacitybacktitle=0.6, toprule=.15mm, opacityback=0, leftrule=.75mm, left=2mm, coltitle=black, colback=white, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{R install details}, colbacktitle=quarto-callout-tip-color!10!white, rightrule=.15mm, colframe=quarto-callout-tip-color-frame, bottomtitle=1mm, toptitle=1mm, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, coltitle=black, toprule=.15mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{R install details}, bottomrule=.15mm, toptitle=1mm, breakable, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, colframe=quarto-callout-tip-color-frame, arc=.35mm, titlerule=0mm, rightrule=.15mm, leftrule=.75mm, left=2mm]
 
 R is a versatile programming language, with a focus on statistical
 computing. It is a big part of academic research in the social sciences.
@@ -256,8 +254,9 @@ R is free and open-source and runs on Windows, Mac OS X, and Linux.
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Download the R installer from the Comprehensive R Archive Network
-  (CRAN)
+  Download the R installer from the
+  \href{https://cran.r-project.org/}{Comprehensive R Archive Network
+  (CRAN)}.
 \end{enumerate}
 
 \begin{itemize}
@@ -303,7 +302,36 @@ R is free and open-source and runs on Windows, Mac OS X, and Linux.
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, arc=.35mm, opacitybacktitle=0.6, toprule=.15mm, opacityback=0, leftrule=.75mm, left=2mm, coltitle=black, colback=white, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{IDE install details}, colbacktitle=quarto-callout-tip-color!10!white, rightrule=.15mm, colframe=quarto-callout-tip-color-frame, bottomtitle=1mm, toptitle=1mm, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, coltitle=black, toprule=.15mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Python install details}, bottomrule=.15mm, toptitle=1mm, breakable, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, colframe=quarto-callout-tip-color-frame, arc=.35mm, titlerule=0mm, rightrule=.15mm, leftrule=.75mm, left=2mm]
+
+\begin{tcolorbox}[enhanced jigsaw, colback=white, coltitle=black, toprule=.15mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{Important}, bottomrule=.15mm, toptitle=1mm, breakable, bottomtitle=1mm, colbacktitle=quarto-callout-important-color!10!white, opacityback=0, colframe=quarto-callout-important-color-frame, arc=.35mm, titlerule=0mm, rightrule=.15mm, leftrule=.75mm, left=2mm]
+
+Python installation is \textbf{only required} if you plan to download
+other versions of SSPs datasets from the IIASA. The \texttt{gtapssp}
+package includes a built-in default dataset, so installing Python is
+optional unless you wish to access the latest or alternative datasets
+from IIASA's API (developed in Python).
+
+\end{tcolorbox}
+
+Python is a general-purpose programming language that is becoming
+increasingly popular in the social sciences. It is free and open-source
+and runs on Windows, Mac OS X, and Linux.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Download Python from the
+  \href{https://www.python.org/downloads/}{Python Software Foundation}.
+\item
+  Run the installer and make sure to check the box that says ``Add
+  Python to PATH'' before clicking on ``Install Now''.\\
+  \includegraphics[width=4.94792in,height=\textheight]{images/clipboard-1705657641.png}
+\end{enumerate}
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, colback=white, coltitle=black, toprule=.15mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{IDE install details}, bottomrule=.15mm, toptitle=1mm, breakable, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, colframe=quarto-callout-tip-color-frame, arc=.35mm, titlerule=0mm, rightrule=.15mm, leftrule=.75mm, left=2mm]
 
 We recommend RStudio as IDE for R.
 
@@ -332,12 +360,12 @@ You can install the development version of \emph{gtapssp} from
 \begin{Highlighting}[]
 \CommentTok{\# If the devtools package is not already installed, please run the disabled line below.}
 \CommentTok{\# install.packages("devtools")}
+
 \NormalTok{devtools}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"tsimonato/gtapssp"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\section{Quick Start: Run the Entire
-Pipeline}\label{quick-start-run-the-entire-pipeline}
+\section{One-Line Workflow}\label{one-line-workflow}
 
 If you'd like to execute the entire pipeline described in this tutorial
 with minimal effort, you can use the \texttt{gtapssp::iiasa\_gtap()}
@@ -348,26 +376,94 @@ Here's an example:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Run the entire pipeline and save the output as a .HAR file}
-\NormalTok{gtapssp}\SpecialCharTok{::}\FunctionTok{iiasa\_gtap}\NormalTok{(}\AttributeTok{outFile =} \StringTok{"gtap\_ssp.har"}\NormalTok{)}
+\NormalTok{ssp\_data }\OtherTok{\textless{}{-}}\NormalTok{ gtapssp}\SpecialCharTok{::}\FunctionTok{iiasa\_gtap}\NormalTok{()}
 
-\CommentTok{\# Or save as a .CSV file}
-\NormalTok{gtapssp}\SpecialCharTok{::}\FunctionTok{iiasa\_gtap}\NormalTok{(}\AttributeTok{outFile =} \StringTok{"gtap\_ssp.csv"}\NormalTok{)}
-
-\CommentTok{\# To simply process the data without saving it}
-\NormalTok{final\_data }\OtherTok{\textless{}{-}}\NormalTok{ gtapssp}\SpecialCharTok{::}\FunctionTok{iiasa\_gtap}\NormalTok{()}
+\NormalTok{ssp\_data}
 \end{Highlighting}
 \end{Shaded}
 
-This function provides flexibility to either save the output in .har or
-.csv formats or return the processed dataset for further use in R.
+\includegraphics{index_files/figure-pdf/unnamed-chunk-4-1.pdf}
+
+This function provides flexibility to either return the processed
+dataset for further use in R or save the output in .har or .csv formats:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Run the entire pipeline and save the output as a .HAR file}
+\NormalTok{gtapssp}\SpecialCharTok{::}\FunctionTok{iiasa\_gtap}\NormalTok{(}\AttributeTok{outFile =} \StringTok{"gtap\_ssp.har"}\NormalTok{)}
+\CommentTok{\# Or save as a .CSV file}
+\NormalTok{gtapssp}\SpecialCharTok{::}\FunctionTok{iiasa\_gtap}\NormalTok{(}\AttributeTok{outFile =} \StringTok{"gtap\_ssp.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Population}
+
+Below is a spatial representation of the population data. The map below
+highlights population estimates for females, aged 65 and above in the
+year 1950, under the SSP1 scenario. The data is sourced from the
+IIASA-WiC POP 2023 dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# If the gtaptools package is not already installed, please run the disabled line below.}
+\CommentTok{\# devtools::install\_github("tsimonato/gtaptools")}
+\NormalTok{data\_map  }\OtherTok{\textless{}{-}}\NormalTok{ ssp\_data }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{iso\_a3 =}\NormalTok{ ISO) }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(MOD }\SpecialCharTok{==} \StringTok{"IIASA{-}WiC POP 2023"}\NormalTok{,}
+\NormalTok{                SCE }\SpecialCharTok{==} \StringTok{"SSP1"}\NormalTok{,}
+\NormalTok{                GND }\SpecialCharTok{==} \StringTok{"FEML"}\NormalTok{,}
+\NormalTok{                AGE }\SpecialCharTok{==} \StringTok{"P65UP"}\NormalTok{,}
+\NormalTok{                YRS }\SpecialCharTok{==} \StringTok{"Y1950"}\NormalTok{)}
+\CommentTok{\# Example: Plot a map using the \textasciigrave{}plot\_map\textasciigrave{} function}
+\NormalTok{gtaptools}\SpecialCharTok{::}\FunctionTok{plot\_map}\NormalTok{(}
+  \AttributeTok{input\_data =}\NormalTok{ data\_map,       }\CommentTok{\# Your data frame}
+  \AttributeTok{value\_var =} \StringTok{"value"}\NormalTok{,    }\CommentTok{\# Replace with the column name for numeric values to plot}
+  \AttributeTok{colors =} \StringTok{"viridis"}\NormalTok{,}
+  \AttributeTok{legend\_title =} \StringTok{"Million people"}\NormalTok{,        }\CommentTok{\# Replace with a title for your legend}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-pdf/unnamed-chunk-6-1.pdf}
+
+\subsection{GDP per capita}
+
+Below is a spatial representation of GDP per capita projections. The map
+below shows GDP per capita in PPP (2017 USD) for the year 2100 under the
+SSP1 scenario. The data comes from the OECD ENV-Growth 2023 dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# If the gtaptools package is not already installed, please run the disabled line below.}
+\CommentTok{\# devtools::install\_github("tsimonato/gtaptools")}
+\NormalTok{data\_map  }\OtherTok{\textless{}{-}}\NormalTok{ ssp\_data }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{iso\_a3 =}\NormalTok{ ISO) }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(MOD }\SpecialCharTok{==} \StringTok{"OECD ENV{-}Growth 2023"}\NormalTok{,}
+\NormalTok{                VAR }\SpecialCharTok{==} \StringTok{"GDP\_PER\_CAPI"}\NormalTok{,}
+\NormalTok{                SCE }\SpecialCharTok{==} \StringTok{"SSP1"}\NormalTok{,}
+\NormalTok{                YRS }\SpecialCharTok{==} \StringTok{"Y2100"}\NormalTok{)}
+\CommentTok{\# Example: Plot a map using the \textasciigrave{}plot\_map\textasciigrave{} function}
+\NormalTok{gtaptools}\SpecialCharTok{::}\FunctionTok{plot\_map}\NormalTok{(}
+  \AttributeTok{input\_data =}\NormalTok{ data\_map,       }\CommentTok{\# Your data frame}
+  \AttributeTok{value\_var =} \StringTok{"value"}\NormalTok{,    }\CommentTok{\# Replace with the column name for numeric values to plot}
+  \AttributeTok{colors =} \StringTok{"viridis"}\NormalTok{,}
+  \AttributeTok{legend\_title =} \StringTok{"(PPP, USD 2017)"}\NormalTok{,        }\CommentTok{\# Replace with a title for your legend}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-pdf/unnamed-chunk-7-1.pdf}
 
 \section{Workflow Overview}\label{workflow-overview}
 
-The pipeline involves the following steps:
+The standard pipeline involves the steps below. There are
+\hyperref[optional-update-input-data]{Optional Steps} to update input
+data via API, which are detailed in a separate section. These steps
+allow for dynamically retrieving and updating specific datasets before
+initiating the pipeline.
 
 \phantomsection\label{workflow-pipeline}
-\includegraphics[width=8in,height=6in]{index_files/figure-latex/mermaid-figure-1.png}
+\includegraphics[width=9.32in,height=9.25in]{index_files/figure-latex/mermaid-figure-1.png}
 
 \section{Data Source}\label{data-source}
 
@@ -380,7 +476,7 @@ For more details, visit the official
 
 Below is a preview of the default IIASA dataset used in the
 \texttt{gtapssp} package. This dataset can be updated with the
-\texttt{gtapssp::updateData} function if newer data or custom updates
+\texttt{gtapssp::updateData()} function if newer data or custom updates
 are required.
 
 \begin{Shaded}
@@ -389,12 +485,12 @@ are required.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-6-1.pdf}
+\includegraphics{index_files/figure-pdf/unnamed-chunk-10-1.pdf}
 
 \section{Step 1: Preprocessing and
 Aggregation}\label{step-1-preprocessing-and-aggregation}
 
-Aggregate the raw data using \texttt{gtapssp::aggData}. This function
+Aggregate the raw data using \texttt{gtapssp::aggData()}. This function
 groups the dataset by specified columns and sums the values within each
 group, ensuring compatibility with the GTAP regional structure.
 
@@ -402,13 +498,11 @@ group, ensuring compatibility with the GTAP regional structure.
 \begin{Highlighting}[]
 \CommentTok{\# Define grouping columns}
 \NormalTok{group\_cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{, }\StringTok{"scenario"}\NormalTok{, }\StringTok{"reg\_iso3"}\NormalTok{, }\StringTok{"variable"}\NormalTok{, }\StringTok{"unit"}\NormalTok{)}
-
 \CommentTok{\# Aggregate raw data}
 \NormalTok{agg\_iiasa }\OtherTok{\textless{}{-}}\NormalTok{ gtapssp}\SpecialCharTok{::}\FunctionTok{aggData}\NormalTok{(}
   \AttributeTok{iiasa\_raw =}\NormalTok{ gtapssp}\SpecialCharTok{::}\NormalTok{iiasa\_raw,}
   \AttributeTok{group\_cols =}\NormalTok{ group\_cols}
 \NormalTok{)}
-
 \CommentTok{\# Funcion documentation:}
 \NormalTok{?gtapssp}\SpecialCharTok{::}\NormalTok{aggData}
 \end{Highlighting}
@@ -556,7 +650,7 @@ external sources if needed.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-14-1.pdf}
+\includegraphics{index_files/figure-pdf/unnamed-chunk-18-1.pdf}
 
 \subsection{Cohort Categories}
 
@@ -566,7 +660,7 @@ external sources if needed.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-16-1.pdf}
+\includegraphics{index_files/figure-pdf/unnamed-chunk-20-1.pdf}
 
 \subsection{Gender Labels}
 
@@ -576,7 +670,7 @@ external sources if needed.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-18-1.pdf}
+\includegraphics{index_files/figure-pdf/unnamed-chunk-22-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -640,11 +734,16 @@ Total). The variable column for GDP is reclassified, such as converting
 \NormalTok{      POP                }\CommentTok{\# Keep the value unchanged for other cases}
 \NormalTok{    )}
 \NormalTok{  )}
+
+\NormalTok{gtap\_ssp }\OtherTok{\textless{}{-}}\NormalTok{ gtap\_ssp  }\SpecialCharTok{|\textgreater{}}    
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(GND }\SpecialCharTok{!=} \StringTok{"TOTL"} \SpecialCharTok{|}\NormalTok{ MOD }\SpecialCharTok{!=} \StringTok{"IIASA{-}WiC POP 2023"}\NormalTok{) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# Exclude total gender records}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(MOD, VAR, SCE, ISO, GND, YRS, AGE) }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{value =} \FunctionTok{sum}\NormalTok{(POP, }\AttributeTok{na.rm =}\NormalTok{ T)) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{as.data.frame}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\section{Step 5: Preparing Final Output Data for
-Export}\label{step-5-preparing-final-output-data-for-export}
+\section{Step 5: Export data}\label{step-5-export-data}
 
 In this step, data is processed into three separate components:
 population (\texttt{POP}), GDP projections (\texttt{GDPI}), and GDP from
@@ -656,29 +755,26 @@ GTAP modeling.
 \begin{Highlighting}[]
 \CommentTok{\# Prepare population (POP) dataset}
 \NormalTok{POP }\OtherTok{\textless{}{-}}\NormalTok{ gtap\_ssp }\SpecialCharTok{|\textgreater{}}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(MOD }\SpecialCharTok{==} \StringTok{"IIASA{-}WiC POP 2023"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}               \CommentTok{\# Select population model}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(GND }\SpecialCharTok{!=} \StringTok{"TOTL"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}                             \CommentTok{\# Exclude total gender records}
+\NormalTok{   dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(MOD }\SpecialCharTok{==} \StringTok{"IIASA{-}WiC POP 2023"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}               \CommentTok{\# Select population model}
+  \CommentTok{\# dplyr::filter(GND != "TOTL") |\textgreater{}                             \# Exclude total gender records}
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(SCE, ISO, GND, YRS, AGE) }\SpecialCharTok{|\textgreater{}}                \CommentTok{\# Group by scenario, ISO, gender, year, and age}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{POP =} \FunctionTok{sum}\NormalTok{(POP, }\AttributeTok{na.rm =}\NormalTok{ T))                 }\CommentTok{\# Sum population values, handling missing data}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{POP =} \FunctionTok{sum}\NormalTok{(value, }\AttributeTok{na.rm =}\NormalTok{ T))                 }\CommentTok{\# Sum population values, handling missing data}
 
 \CommentTok{\# Prepare GDP projections (GDPI)}
 \NormalTok{GDPI }\OtherTok{\textless{}{-}}\NormalTok{ gtap\_ssp }\SpecialCharTok{|\textgreater{}} 
-\NormalTok{  tidyr}\SpecialCharTok{::}\FunctionTok{complete}\NormalTok{(MOD, VAR, SCE, ISO, YRS, }\AttributeTok{fill =} \FunctionTok{list}\NormalTok{(}\AttributeTok{POP =} \DecValTok{0}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# Ensure all combinations exist with default values}
+\NormalTok{  tidyr}\SpecialCharTok{::}\FunctionTok{complete}\NormalTok{(MOD, VAR, SCE, ISO, YRS, }\AttributeTok{fill =} \FunctionTok{list}\NormalTok{(}\AttributeTok{value =} \DecValTok{0}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# Ensure all combinations exist with default values}
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(MOD }\SpecialCharTok{==} \StringTok{"IIASA GDP 2023"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}                         \CommentTok{\# Select IIASA GDP projections model}
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(VAR }\SpecialCharTok{!=} \StringTok{"Population"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}                             \CommentTok{\# Exclude population variables}
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(VAR, SCE, ISO, YRS) }\SpecialCharTok{|\textgreater{}}                            \CommentTok{\# Group by variable, scenario, ISO, and year}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{GDPI =} \FunctionTok{sum}\NormalTok{(POP, }\AttributeTok{na.rm =}\NormalTok{ T))                      }\CommentTok{\# Sum GDP values, handling missing data}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{GDPI =} \FunctionTok{sum}\NormalTok{(value, }\AttributeTok{na.rm =}\NormalTok{ T))                      }\CommentTok{\# Sum GDP values, handling missing data}
 
 \CommentTok{\# Prepare GDP from OECD ENV{-}Growth dataset (GDPO)}
 \NormalTok{GDPO }\OtherTok{\textless{}{-}}\NormalTok{ gtap\_ssp }\SpecialCharTok{|\textgreater{}}
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(MOD }\SpecialCharTok{==} \StringTok{"OECD ENV{-}Growth 2023"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}                  \CommentTok{\# Select GDP from OECD ENV{-}Growth dataset}
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(VAR, SCE, ISO, YRS) }\SpecialCharTok{|\textgreater{}}                           \CommentTok{\# Group by variable, scenario, ISO, and year}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{GDPO =} \FunctionTok{sum}\NormalTok{(POP, }\AttributeTok{na.rm =}\NormalTok{ T))                     }\CommentTok{\# Sum GDP values, handling missing data}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{GDPO =} \FunctionTok{sum}\NormalTok{(value, }\AttributeTok{na.rm =}\NormalTok{ T))                     }\CommentTok{\# Sum GDP values, handling missing data}
 \end{Highlighting}
 \end{Shaded}
-
-\subsubsection{Convert to Arrays and Add
-Descriptions}\label{convert-to-arrays-and-add-descriptions}
 
 The processed datasets (\texttt{POP}, \texttt{GDPI}, and \texttt{GDPO})
 are converted into arrays, rearranged to 5 dimensions and labeled with
@@ -715,8 +811,6 @@ descriptive attributes. These arrays are required for saving into
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Export to .har File}\label{export-to-.har-file}
-
 Save the prepared data arrays into a \texttt{.har} file using the
 \texttt{HARr::write\_har} function.
 
@@ -727,10 +821,9 @@ Save the prepared data arrays into a \texttt{.har} file using the
 \end{Highlighting}
 \end{Shaded}
 
-\section{Optional Step: Download and Update input
-data}\label{optional-step-download-and-update-input-data}
+\section{Optional: Update input data}\label{optional-update-input-data}
 
-The gtapssp::updateData function allows users to download and process
+The gtapssp::updateData() function allows users to download and process
 the latest version of the SSPs dataset from the IIASA database. This
 step is optional and should be used if you want to replace the default
 SSP dataset included in the gtapssp package (gtapssp::iiasa\_raw) with a
@@ -742,16 +835,25 @@ details on the pyam package and its integration with R, visit
 \phantomsection\label{optinional}
 \includegraphics[width=9.29in,height=2.79in]{index_files/figure-latex/mermaid-figure-2.png}
 
+To execute the functionality of updating data through the IIASA API, the
+\href{https://rstudio.github.io/reticulate/}{reticulate} R package is
+used as a bridge between the IIASA API (developed in Python) and the R
+interface. However, it is essential to have Python installed on the
+machine where the code will run. Additionally, the full path to the
+\texttt{python.exe} executable must be provided to the
+\texttt{gtapssp::updateData()} function, so R can access the installed
+Python interpreter.
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Define the Python executable path and output file location}
-\NormalTok{pythonExePath }\OtherTok{\textless{}{-}} \StringTok{"C:}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{tsimonat}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{AppData}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Local}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Programs}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Python}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Python312}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{python.exe"}
-\NormalTok{outputFile }\OtherTok{\textless{}{-}} \StringTok{"data/iiasa\_raw.rda"}
+\CommentTok{\# Ensure Python is installed on your machine}
+\CommentTok{\# Configure the path to the python.exe executable}
+\NormalTok{pythonExePath }\OtherTok{\textless{}{-}} \StringTok{"C:}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{\textless{}username\textgreater{}}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{AppData}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Local}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Programs}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Python}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Python312}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{python.exe"}
 
-\CommentTok{\# Download and process raw data}
+\CommentTok{\# Use the gtapssp::updateData function to download and process updated data from IIASA}
 \NormalTok{iiasa\_raw }\OtherTok{\textless{}{-}}\NormalTok{ gtapssp}\SpecialCharTok{::}\FunctionTok{updateData}\NormalTok{(}
   \AttributeTok{pythonExePath =}\NormalTok{ pythonExePath,}
-  \AttributeTok{outputFile =}\NormalTok{ outputFile}
+  \AttributeTok{outputFile =} \StringTok{"data/iiasa\_raw.rda"} \CommentTok{\# Location to save the processed file}
 \NormalTok{)}
 
 \CommentTok{\# Funcion documentation:}
@@ -759,7 +861,7 @@ details on the pyam package and its integration with R, visit
 \end{Highlighting}
 \end{Shaded}
 
-You can also use the \texttt{gtapssp::updateCorresp} function to apply
+You can also use the \texttt{gtapssp::updateCorresp()} function to apply
 custom regional mappings, allowing flexibility to aggregate the dataset
 according to your specific requirements.
 
@@ -788,7 +890,20 @@ instead of \texttt{reg\_iso3.}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-28-1.pdf}
+\includegraphics{index_files/figure-pdf/unnamed-chunk-32-1.pdf}
+
+\section{Acknowledgments}\label{acknowledgments}
+
+This tutorial and the development of the \texttt{gtapssp} package were
+supported by the
+\textbf{\href{https://www.gtap.agecon.purdue.edu/default.asp}{GTAP
+Team}}, with special thanks to
+\href{https://www.gtap.agecon.purdue.edu/network/member_display.asp?UserID=415}{\textbf{Dr.~Dominique
+van der Mensbrugghe}},
+\href{https://www.gtap.agecon.purdue.edu/network/member_display.asp?UserID=6446}{\textbf{Dr.~Angel
+Aguiar}}, and
+\href{https://www.gtap.agecon.purdue.edu/network/member_display.asp?UserID=2958}{\textbf{Dr.~Erwin
+Corong}} for their guidance and expertise.
 
 
 
