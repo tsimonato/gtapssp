@@ -105,7 +105,7 @@ To use the *gtapssp* package, it's necessary to have *R* installed on your compu
 
 R is a versatile programming language, with a focus on statistical computing. It is a big part of academic research in the social sciences. R is free and open-source and runs on Windows, Mac OS X, and Linux.
 
-1.  Download the R installer from the Comprehensive R Archive Network (CRAN)
+1.  Download the R installer from the [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/).
 
 -   Choose the appropriate installer for your operating system and computer architecture (32-bit or 64-bit).
 -   If on Mac, you will need to know if you are using an Intel or Apple Silicon (M1) processor.
@@ -131,7 +131,7 @@ R is a versatile programming language, with a focus on statistical computing. It
 ## Python install details
 
 ::: callout-important
-Python installation is **only required** if you plan to download updated or custom datasets SSPs from the IIASA The `gtapssp` package includes a built-in default dataset, so installing Python is optional unless you wish to access the latest or alternative datasets from IIASA's API (developed in Python).
+Python installation is **only required** if you plan to download other versions of SSPs datasets from the IIASA. The `gtapssp` package includes a built-in default dataset, so installing Python is optional unless you wish to access the latest or alternative datasets from IIASA's API (developed in Python).
 :::
 
 Python is a general-purpose programming language that is becoming increasingly popular in the social sciences. It is free and open-source and runs on Windows, Mac OS X, and Linux.
@@ -172,23 +172,43 @@ Here’s an example:
 
 ```{r}
 #| eval: false
+ssp_data <- gtapssp::iiasa_gtap()
+
+ssp_data
+```
+```{r}
+#| eval: true
+#| include: false
+DT::datatable(ssp_data[1:40,], height = 300, options = list(
+                scrollX = TRUE,
+                scrollY = "250px",
+                scrollCollapse = TRUE
+              ))
+```
+
+This function provides flexibility to either return the processed dataset for further use in R or save the output in .har or .csv formats:
+
+```{r}
+#| eval: false
 # Run the entire pipeline and save the output as a .HAR file
 gtapssp::iiasa_gtap(outFile = "gtap_ssp2.har")
 
 # Or save as a .CSV file
 gtapssp::iiasa_gtap(outFile = "gtap_ssp.csv")
 
-# To simply process the data without saving it
-ssp_data <- gtapssp::iiasa_gtap()
+```
 
-ssp_data <- final_data
+::: panel-tabset
+## Population
 
+Below is a spatial representation of the population data. The map below highlights population estimates for females (GND == "FEML"), aged 65 and above (AGE == "P65UP") in the year 1950 (YRS == "Y1950"), under the SSP1 scenario (SCE == "SSP1"). The data is sourced from the IIASA-WiC POP 2023 dataset (MOD == "IIASA-WiC POP 2023").
 
-# Load required libraries
-library(gtaptools)
-library(ggplot2)  # For additional customization if needed
+```{r}
 
-data_map  <- final_data |> 
+# If the gtaptools package is not already installed, please run the disabled line below.
+# devtools::install_github("tsimonato/gtaptools")
+
+data_map  <- ssp_data |> 
   dplyr::mutate(iso_a3 = ISO) |> 
   dplyr::filter(MOD == "IIASA-WiC POP 2023",
                 SCE == "SSP1",
@@ -198,12 +218,17 @@ data_map  <- final_data |>
 # Example: Plot a map using the `plot_map` function
 gtaptools::plot_map(
   input_data = data_map,       # Your data frame
-  value_var = "POP",    # Replace with the column name for numeric values to plot
+  value_var = "value",    # Replace with the column name for numeric values to plot
   colors = "viridis",
   legend_title = "Million people",        # Replace with a title for your legend
 )
+```
 
-gtap_ssp$MOD |> unique()
+## GDP per capita
+
+Below is a spatial representation of GDP per capita projections. The map below shows GDP per capita in PPP (2017 USD) for the year 2100 (YRS == "Y2100") under the SSP1 scenario. The data comes from the OECD ENV-Growth 2023 dataset.
+
+```{r}
 data_map  <- gtap_ssp |> 
   dplyr::mutate(iso_a3 = ISO) |> 
   dplyr::filter(MOD == "OECD ENV-Growth 2023",
@@ -215,14 +240,9 @@ gtaptools::plot_map(
   input_data = data_map,       # Your data frame
   value_var = "value",    # Replace with the column name for numeric values to plot
   colors = "viridis",
-  legend_title = "Million people",        # Replace with a title for your legend
+  legend_title = "(PPP, USD 2017)",        # Replace with a title for your legend
 )
-
-
-
 ```
-
-This function provides flexibility to either save the output in .har or .csv formats or return the processed dataset for further use in R.
 
 # Workflow Overview
 
