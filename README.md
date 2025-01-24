@@ -1,7 +1,9 @@
 # GTAPSSP: SSPs for GTAP Framework
 
 <!-- badges: start -->
+<!-- 
 [![R-CMD-check](https://github.com/tsimonato/gtapssp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tsimonato/gtapssp/actions/workflows/R-CMD-check.yaml)
+<!--
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)  
 <!-- badges: end -->
 
