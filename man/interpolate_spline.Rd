@@ -39,6 +39,9 @@ This function takes a data frame and performs cubic spline interpolation
 to fill in missing year gaps for specified groups.
 Groups with fewer than 2 non-NA values are excluded from interpolation.
 }
+\details{
+This function was developed with the guidance and support of Dr. Dominique van der Mensbrugghe.
+}
 \examples{
 data <- data.frame(
   Scenario = rep(c("Scenario1", "Scenario2"), each = 5),

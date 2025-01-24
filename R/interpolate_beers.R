@@ -3,7 +3,9 @@
 #' This function applies the Beers method interpolation on a grouped data frame.
 #' It requires each group to have at least 6 non-NA values and assumes data to be in 5-year intervals.
 #' Groups with fewer than 6 non-NA values are excluded from interpolation.
-#'
+#' 
+#' This function was developed with the guidance and support of Dr. Dominique van der Mensbrugghe.
+#' 
 #' @param input_df A data frame containing the data to be interpolated.
 #' @param groups A vector of column names to group by.
 #' @param year The name of the column containing year information.

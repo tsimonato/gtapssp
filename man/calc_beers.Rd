@@ -22,6 +22,9 @@ A numeric vector with interpolated or subdivided values.
 \description{
 This function implements the Beers interpolation or subdivision methods, either in their ordinary or modified forms. It generates interpolated or subdivided points from a given data set. The Beers interpolation method, first introduced in "The Record of the American Institute of Actuaries" (Vol. 34, Part I, 1945), is a six-term formula designed to minimize the fifth differences in interpolated results. More details can be found in "The Methods and Materials of Demography, Volume 2" (page 877).
 }
+\details{
+This function was developed with the guidance and support of Dr. Dominique van der Mensbrugghe.
+}
 \examples{
 calc_beers(c(1, 2, 3, 4, 5, 6), "ordinary")
 calc_beers(c(1, 2, 3, 4, 5, 6), "modified")

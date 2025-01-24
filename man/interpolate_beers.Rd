@@ -30,6 +30,9 @@ This function applies the Beers method interpolation on a grouped data frame.
 It requires each group to have at least 6 non-NA values and assumes data to be in 5-year intervals.
 Groups with fewer than 6 non-NA values are excluded from interpolation.
 }
+\details{
+This function was developed with the guidance and support of Dr. Dominique van der Mensbrugghe.
+}
 \examples{
 data <- data.frame(
   Scenario = rep(c("Scenario1", "Scenario2"), each = 6),

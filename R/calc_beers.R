@@ -2,6 +2,8 @@
 #'
 #' This function implements the Beers interpolation or subdivision methods, either in their ordinary or modified forms. It generates interpolated or subdivided points from a given data set. The Beers interpolation method, first introduced in "The Record of the American Institute of Actuaries" (Vol. 34, Part I, 1945), is a six-term formula designed to minimize the fifth differences in interpolated results. More details can be found in "The Methods and Materials of Demography, Volume 2" (page 877).
 #'
+#' This function was developed with the guidance and support of Dr. Dominique van der Mensbrugghe.
+#'
 #' @param values A numeric vector of data points for interpolation or subdivision.
 #' @param method A character string specifying the method to be used. (default = "ordinary")
 #'               Must be one of "ordinary", "modified", "subidvision_ordinary", or "subidvision_modified".

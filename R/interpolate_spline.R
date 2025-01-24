@@ -3,7 +3,9 @@
 #' This function takes a data frame and performs cubic spline interpolation
 #' to fill in missing year gaps for specified groups.
 #' Groups with fewer than 2 non-NA values are excluded from interpolation.
-#'
+#' 
+#' This function was developed with the guidance and support of Dr. Dominique van der Mensbrugghe.
+#' 
 #' @param input_df A data frame containing the data to be processed.
 #' @param groups A vector of column names to group by (to loop applying spline).
 #' @param year The name of the column containing years.
