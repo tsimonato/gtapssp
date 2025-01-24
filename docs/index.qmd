@@ -45,6 +45,44 @@ usethis::use_github_action("check-standard")
 if (!requireNamespace('remotes', quietly = TRUE)){ install.packages('remotes')} 
 gert::git_commit_all("Corrige workflow do GitHub Actions para execução correta")
 gert::git_push()
+Encoding(gtapssp::isoList$Region)
+
+# Load the data from CSV
+csv <- read.csv("data/isoList.csv", stringsAsFactors = FALSE, fileEncoding = "UTF-8")
+
+# Save the dataset to the package's data directory with UTF-8 encoding and compression
+usethis::use_data(csv, overwrite = TRUE, compress = "bzip2")
+
+isoList$country_name <- iconv(gtapssp::isoList$Region, from = "UTF-8", to = "ASCII//TRANSLIT")
+isoList2$country_name <- iconv(isoList2$country_name, from = "UTF-8", to = "ASCII//TRANSLIT")
+
+
+isoList <- read.csv("data/isoList.csv", stringsAsFactors = FALSE, fileEncoding = "latin1")
+
+# Save it in the package with the correct encoding
+usethis::use_data(isoList, overwrite = TRUE, compress = "bzip2")
+
+library(readr)
+isoList <- read_csv("data/isoList.csv", locale = locale(encoding = "latin1"))
+isoList$Region <- iconv(isoList$Region, from = "latin1", to = "UTF-8")
+
+
+isoList$Region <- stringi::stri_encode(isoList$Region, "UTF-8")
+Encoding(isoList$Region)
+readr::guess_encoding("data/isoList.csv")
+isoList <- read.csv("data/isoList.csv", stringsAsFactors = FALSE, fileEncoding = "latin1")
+isoList$Region <- enc2utf8(isoList$Region)
+Encoding(isoList$Region) <- "UTF-8"
+usethis::use_data(isoList, overwrite = TRUE, compress = "xz")
+
+a <- iconv(isoList$Region, from = "Latin1", to = "UTF-8")
+
+gtapssp::isoList
+
+a <- enc2utf8(gtapssp::isoList$Region)
+a <- iconv(a, to = "UTF-8")
+Encoding(a) <- "UTF-8"
+Encoding(a)
 
 ```
 
@@ -436,7 +474,7 @@ gtap_ssp <- gtap_ssp |>
 
 ```
 
-# Step 5: Preparing Final Output Data for Export
+# Step 5: Export data
 
 In this step, data is processed into three separate components: population (`POP`), GDP projections (`GDPI`), and GDP from the OECD ENV-Growth dataset (`GDPO`). These datasets are then formatted as arrays and saved to a `.har` file for further use in GTAP modeling.
 
@@ -463,8 +501,6 @@ GDPO <- gtap_ssp |>
   dplyr::group_by(VAR, SCE, ISO, YRS) |>                           # Group by variable, scenario, ISO, and year
   dplyr::summarise(GDPO = sum(POP, na.rm = T))                     # Sum GDP values, handling missing data
 ```
-
-### Convert to Arrays and Add Descriptions
 
 The processed datasets (`POP`, `GDPI`, and `GDPO`) are converted into arrays, rearranged to 5 dimensions and labeled with descriptive attributes. These arrays are required for saving into `.har` format.
 
@@ -496,8 +532,6 @@ attr(data$POP, "description") <- "IIASA-WiC POP 2023 (million people)"       # P
 attr(data$GDPI, "description") <- "IIASA GDP 2023 (USD_2017/yr)"             # GDP projections description
 attr(data$GDPO, "description") <- "OECD ENV-Growth 2023 (USD_2017/yr)"       # OECD GDP description
 ```
-
-## Export to .har File
 
 Save the prepared data arrays into a `.har` file using the `HARr::write_har` function.
 
