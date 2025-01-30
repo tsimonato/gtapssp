@@ -15,45 +15,44 @@
 #' **Steps in the Routine**:
 #' \itemize{
 #'   \item **Step 1: Data Aggregation**:
-#'     Aggregates the IIASA raw data using the [gtapssp::aggData()] function, which allows for 
-#'     regional mappings based on `aggTxtFile`. The aggregation groups the data by columns specified 
-#'     in `group_cols` and combines regional data accordingly.
+#'     Aggregates the IIASA raw data using the [gtapssp::aggData()] function, grouping 
+#'     by the columns specified in `group_cols`. This ensures regional mappings 
+#'     and structured data organization.
 #'
 #'   \item **Step 2: Spline Interpolation**:
-#'     Applies the [gtapssp::interpolate_spline()] function to interpolate missing values in the 
-#'     `value` column for the specified models (`"IIASA GDP 2023"`, `"OECD ENV-Growth 2023"`). 
-#'     The cubic spline method creates a smooth curve that passes through the available data points, 
-#'     ensuring continuity in derivatives and producing realistic interpolations.
+#'     Applies the [gtapssp::interpolate_spline()] function to interpolate missing values 
+#'     for GDP-related variables (`"IIASA GDP 2023"`, `"OECD ENV-Growth 2023"`). 
+#'     The cubic spline method provides a smooth approximation of missing data.
 #'
 #'   \item **Step 3: Beers Interpolation**:
-#'     Applies the [gtapssp::interpolate_beers()] function to interpolate missing population data 
-#'     (`model = "IIASA-WiC POP 2023"`) using Beers interpolation. This method is specifically 
-#'     designed for demographic data, providing age-structured estimates that align with population 
-#'     distribution and totals. It preserves consistency between age groups while interpolating.
+#'     Uses [gtapssp::interpolate_beers()] to interpolate population data 
+#'     (`model = "IIASA-WiC POP 2023"`) by age cohort. Beers interpolation 
+#'     is well-suited for demographic data, maintaining consistency across 
+#'     age structures.
 #'
 #'   \item **Step 4: Combine Outputs**:
-#'     Combines the results of the spline and beers interpolations. 
-#'     This step stacks the interpolated data vertically to produce a unified dataset.
+#'     Stacks the interpolated data vertically, merging GDP and population 
+#'     estimates into a unified dataset.
 #'
-#'   \item **Step 5: Expand Variables**:
-#'     Splits the `variable` column into multiple columns (e.g., `variable`, `gender`, `cohort`, 
-#'     and `education_level`). This expansion helps isolate 
-#'     specific attributes encoded in the `variable` column.
+#'   \item **Step 5: Expand Scenarios**:
+#'     Expands historical reference scenarios across all SSP categories 
+#'     (SSP1 to SSP5) to ensure consistency in projections.
 #'
-#'   \item **Step 6: Filter Data**:
-#'     Filters rows based on several conditions:
-#'     \itemize{
-#'       \item Removes total rows (`education_level` is `NA`) unless the scenario is 
-#'       `"Historical Reference"` or the cohort is among `Age 0-4`, `Age 5-9`, or `Age 10-14`.
-#'     }
+#'   \item **Step 6: Expand Data**:
+#'     Ensures all possible combinations of regions, years, and scenarios exist, 
+#'     filling missing entries with zero values.
 #'
-#'   \item **Step 7: Calculate Growth Rates**:
-#'     Uses [gtapssp::growth_rate()] to calculate annual growth rates for the `value` column. 
-#'     Growth rates are computed as percentage changes between consecutive years within each group 
-#'     specified in `group_cols`.
+#'   \item **Step 7: Merge Additional Labels**:
+#'     Joins auxiliary datasets (`educDict`, `cohortDict`, `genderDict`) 
+#'     to add educational level, cohort, and gender details to the dataset.
 #'
-#'   \item **Step 8: Save to File (Optional)**:
-#'     If `outFile` is provided, saves the final processed dataset to a .HAR or .CSV file
+#'   \item **Step 8: Data Cleaning and Formatting**:
+#'     Standardizes column names, fills missing values, and adjusts GDP values 
+#'     where necessary.
+#'
+#'   \item **Step 9: Export Data (Optional)**:
+#'     Saves the processed dataset as `.har` (GTAP format) or `.csv` if an 
+#'     output file path is provided.
 #' }
 #'
 #' @seealso 

@@ -30,7 +30,7 @@ To install the development version of `gtapssp` from GitHub:
 install.packages("devtools")
 
 # Install gtapssp from GitHub
-devtools::install_github("/gtapssp")
+devtools::install_github("tsimonato/gtapssp")
 ```
 
 ## 🛠️ Key Features

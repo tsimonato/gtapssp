@@ -28,45 +28,44 @@ filtering, and growth rate calculation. Optionally, the final dataset can be sav
 \strong{Steps in the Routine}:
 \itemize{
 \item \strong{Step 1: Data Aggregation}:
-Aggregates the IIASA raw data using the \code{\link[=aggData]{aggData()}} function, which allows for
-regional mappings based on \code{aggTxtFile}. The aggregation groups the data by columns specified
-in \code{group_cols} and combines regional data accordingly.
+Aggregates the IIASA raw data using the \code{\link[=aggData]{aggData()}} function, grouping
+by the columns specified in \code{group_cols}. This ensures regional mappings
+and structured data organization.
 
 \item \strong{Step 2: Spline Interpolation}:
-Applies the \code{\link[=interpolate_spline]{interpolate_spline()}} function to interpolate missing values in the
-\code{value} column for the specified models (\code{"IIASA GDP 2023"}, \code{"OECD ENV-Growth 2023"}).
-The cubic spline method creates a smooth curve that passes through the available data points,
-ensuring continuity in derivatives and producing realistic interpolations.
+Applies the \code{\link[=interpolate_spline]{interpolate_spline()}} function to interpolate missing values
+for GDP-related variables (\code{"IIASA GDP 2023"}, \code{"OECD ENV-Growth 2023"}).
+The cubic spline method provides a smooth approximation of missing data.
 
 \item \strong{Step 3: Beers Interpolation}:
-Applies the \code{\link[=interpolate_beers]{interpolate_beers()}} function to interpolate missing population data
-(\code{model = "IIASA-WiC POP 2023"}) using Beers interpolation. This method is specifically
-designed for demographic data, providing age-structured estimates that align with population
-distribution and totals. It preserves consistency between age groups while interpolating.
+Uses \code{\link[=interpolate_beers]{interpolate_beers()}} to interpolate population data
+(\code{model = "IIASA-WiC POP 2023"}) by age cohort. Beers interpolation
+is well-suited for demographic data, maintaining consistency across
+age structures.
 
 \item \strong{Step 4: Combine Outputs}:
-Combines the results of the spline and beers interpolations.
-This step stacks the interpolated data vertically to produce a unified dataset.
+Stacks the interpolated data vertically, merging GDP and population
+estimates into a unified dataset.
 
-\item \strong{Step 5: Expand Variables}:
-Splits the \code{variable} column into multiple columns (e.g., \code{variable}, \code{gender}, \code{cohort},
-and \code{education_level}). This expansion helps isolate
-specific attributes encoded in the \code{variable} column.
+\item \strong{Step 5: Expand Scenarios}:
+Expands historical reference scenarios across all SSP categories
+(SSP1 to SSP5) to ensure consistency in projections.
 
-\item \strong{Step 6: Filter Data}:
-Filters rows based on several conditions:
-\itemize{
-\item Removes total rows (\code{education_level} is \code{NA}) unless the scenario is
-\code{"Historical Reference"} or the cohort is among \verb{Age 0-4}, \verb{Age 5-9}, or \verb{Age 10-14}.
-}
+\item \strong{Step 6: Expand Data}:
+Ensures all possible combinations of regions, years, and scenarios exist,
+filling missing entries with zero values.
 
-\item \strong{Step 7: Calculate Growth Rates}:
-Uses \code{\link[=growth_rate]{growth_rate()}} to calculate annual growth rates for the \code{value} column.
-Growth rates are computed as percentage changes between consecutive years within each group
-specified in \code{group_cols}.
+\item \strong{Step 7: Merge Additional Labels}:
+Joins auxiliary datasets (\code{educDict}, \code{cohortDict}, \code{genderDict})
+to add educational level, cohort, and gender details to the dataset.
 
-\item \strong{Step 8: Save to File (Optional)}:
-If \code{outFile} is provided, saves the final processed dataset to a .HAR or .CSV file
+\item \strong{Step 8: Data Cleaning and Formatting}:
+Standardizes column names, fills missing values, and adjusts GDP values
+where necessary.
+
+\item \strong{Step 9: Export Data (Optional)}:
+Saves the processed dataset as \code{.har} (GTAP format) or \code{.csv} if an
+output file path is provided.
 }
 }
 \examples{
