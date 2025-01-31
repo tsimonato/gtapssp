@@ -46,3 +46,4 @@ setup.R
 docs/*.qmd
 out.csv
 docs/index.qmd
+"docs/slides/" 
